@@ -1,0 +1,31 @@
+<html>
+<!-- Load icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- The form -->
+<form id="myform" class="example" onsubmit="httpGet()">
+    <input type="text" placeholder="Search.." name="search">
+    <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+
+</html>
+
+<script>
+googke = "AIzaSyA6UQVaGsYD85f_ZWDHk78GIl4RAqUwASE" //apparently its fine to expose your JS api key
+
+function httpGet()
+{
+    searchvar = document.getElementById("myform").elements["search"].value
+    theUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q='+ searchvar+'&key='+ googke
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    data = JSON.parse(xmlHttp.responseText)
+    return data;
+}
+
+function renderChoice(){
+
+    
+}
+</script>
