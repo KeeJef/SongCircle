@@ -3,29 +3,53 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- The form -->
-<form id="myform" class="example" onsubmit="httpGet()">
-    <input type="text" placeholder="Search.." name="search">
-    <button type="submit"><i class="fa fa-search"></i></button>
-</form>
+
+<input id="searchbox" type="text" placeholder="Search.." name="search">
+<button type="submit" onclick="httpGet()"><i class="fa fa-search"></i></button>
+
+
+<div id='main'></div>
 
 </html>
 
 <script>
+
 googke = "AIzaSyA6UQVaGsYD85f_ZWDHk78GIl4RAqUwASE" //apparently its fine to expose your JS api key
 
 function httpGet()
 {
-    searchvar = document.getElementById("myform").elements["search"].value
+    searchvar = document.getElementById("searchbox").value
     theUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q='+ searchvar+'&key='+ googke
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
     data = JSON.parse(xmlHttp.responseText)
-    return data;
+    renderChoice(data)
 }
 
-function renderChoice(){
 
-    
+
+function renderChoice(data){
+
+for (let index = 0; index < data.items.length; index++) {
+
+    var ytinfoframe = document.createElement("ytinfoframe")
+    var videoinfo = document.createElement("videoinfo")
+
+    thumburl = data.items[index].snippet.thumbnails.medium.url
+    titlefull = data.items[index].snippet.title 
+    channelTitle = data.items[index].snippet.channelTitle
+
+    videoinfo.innerHTML = thumburl+" "+channelTitle+" "+titlefull
+
+    ytinfoframe.innerHTML += "<br>"
+
+    ytinfoframe.className = "ytinfoframe"
+    videoinfo.className = "videoinfo"
+
+    ytinfoframe.appendChild(videoinfo)
+
+    document.getElementById("main").appendChild(ytinfoframe)
+}
 }
 </script>
