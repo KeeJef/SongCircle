@@ -2,34 +2,38 @@
 <!-- Load icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<!-- The form -->
-
 <input id="searchbox" type="text" placeholder="Search.." name="search">
 <button type="submit" onclick="httpGet()"><i class="fa fa-search"></i></button>
-
 
 <div id='main'></div>
 
 </html>
 
 <script>
-
+searchcount = 0
 googke = "AIzaSyA6UQVaGsYD85f_ZWDHk78GIl4RAqUwASE" //apparently its fine to expose your JS api key
+YoutubeVidChoiceArray = []
+currentVids = []
 
 function httpGet()
 {
     searchvar = document.getElementById("searchbox").value
-    theUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q='+ searchvar+'&key='+ googke
+    theUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+ searchvar+'&key='+ googke
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
     data = JSON.parse(xmlHttp.responseText)
+    currentVids = []
+    currentVids = data.items
     renderChoice(data)
 }
 
-
-
 function renderChoice(data){
+
+    if (searchcount != 0) {
+        document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
+
+    }
 
 for (let index = 0; index < data.items.length; index++) {
 
@@ -40,7 +44,8 @@ for (let index = 0; index < data.items.length; index++) {
     titlefull = data.items[index].snippet.title 
     channelTitle = data.items[index].snippet.channelTitle
 
-    videoinfo.innerHTML = thumburl+" "+channelTitle+" "+titlefull
+    videoinfo.innerHTML = titlefull+" ----- "+channelTitle+ "<br><img src=\""+ thumburl +"\" alt=\""+channelTitle+"\">"+"<button id=" + index  + "\" class=\"myButton\" onclick=\"setchoice("+ index +")\">✓</button>"
+
 
     ytinfoframe.innerHTML += "<br>"
 
@@ -51,5 +56,55 @@ for (let index = 0; index < data.items.length; index++) {
 
     document.getElementById("main").appendChild(ytinfoframe)
 }
+searchcount += 1 
 }
+
+function setchoice (choice){
+
+urlchoice = currentVids[choice].id.videoId
+YoutubeVidChoiceArray.push(urlchoice)
+document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
+
+}
+
 </script>
+
+<style>
+
+.ytinfoframe{
+
+width: 100%;
+display: block;
+box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+margin-bottom: 30px;
+padding: 10px;
+
+}
+
+.videoinfo{
+   font-size: 20px;
+}
+
+.myButton {
+	background-color:#44c767;
+	border-radius:17px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:24px;
+	padding:8px 30px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.myButton:hover {
+	background-color:#5cbf2a;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+
+</style>
