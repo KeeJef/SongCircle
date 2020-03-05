@@ -3,7 +3,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <input id="searchbox" type="text" placeholder="Search.." name="search">
-<button type="submit" onclick="httpGet()"><i class="fa fa-search"></i></button>
+<button id="searchsubmit" type="submit" onclick="httpGet()"><i class="fa fa-search"></i></button>
+<br>
+<button id="finished" class="myButton" onclick="finished()">Finished</button>
 
 <div id='main'></div>
 
@@ -13,12 +15,13 @@
 searchcount = 0
 googke = "AIzaSyA6UQVaGsYD85f_ZWDHk78GIl4RAqUwASE" //apparently its fine to expose your JS api key
 YoutubeVidChoiceArray = []
+choiceiteration = 0
 currentVids = []
 
 function httpGet()
 {
     searchvar = document.getElementById("searchbox").value
-    theUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+ searchvar+'&key='+ googke
+    theUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q='+ searchvar+'&key='+ googke //remove channel results? 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
     xmlHttp.send( null );
@@ -65,6 +68,61 @@ urlchoice = currentVids[choice].id.videoId
 YoutubeVidChoiceArray.push(urlchoice)
 document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
 
+}
+
+function finished(){
+    document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
+    document.getElementById("finished").remove()
+    document.getElementById("searchbox").remove()
+    document.getElementById("searchsubmit").remove()
+    shuffleArray(YoutubeVidChoiceArray)
+    renderOne()
+}
+
+function renderOne(){
+
+if (choiceiteration == YoutubeVidChoiceArray.length) {
+    var div = document.getElementById('main');
+    div.innerHTML += "You're finished"+"<br><button id=\"newround\" class=\"myButton\" onclick=\"next()\">New Round</button>"
+
+    return
+}
+
+var infopannel = document.createElement("infopannel")
+var videoplayer = document.createElement("videoplayer")
+var buttons = document.createElement("buttonspane")
+
+videoplayer.innerHTML = "<iframe width=\"420\" height=\"345\" src=\"https://www.youtube.com/embed/"+ YoutubeVidChoiceArray[choiceiteration] +"\"></iframe>"
+buttons.innerHTML = "<button id=\"myButton\" class=\"myButton\" onclick=\"next()\">Next</button>"
+infopannel.innerHTML = "You have " + (YoutubeVidChoiceArray.length - choiceiteration ) + " Videos to go for this round"
+
+videoplayer.id = "videoplayer"
+buttons.id = "buttonspane"
+infopannel.id = "infopannel"
+
+document.getElementById("main").appendChild(infopannel)
+document.getElementById("main").appendChild(videoplayer)
+document.getElementById("main").appendChild(buttons)
+
+choiceiteration += 1 
+
+}
+
+function next(){
+    document.getElementById("videoplayer").remove()
+    document.getElementById("buttonspane").remove()
+    document.getElementById("infopannel").remove()
+
+    renderOne()
+}
+
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
 }
 
 </script>
