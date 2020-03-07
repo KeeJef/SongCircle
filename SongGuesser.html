@@ -1,11 +1,27 @@
 <html>
-<!-- Load icon library -->
+
+
+    <div id="page-container">
+        <div id="content-wrap">
+          <!-- all other page content -->
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<div>Song Guesser</div>
-<div id = 'searchelement'></div>
+<div class="logo"><a href="SongGuesser.html"><img class="logoimg" src="songcircle.png" alt="SongcircleLogo"></a></div>
 <br>
-<div id='Navbuttons'></div>
-<div id='main'><button id="newgame" class="myButton" onclick="tryclear()">New Game</button></div>
+<br>
+<div id="instructions" class="instructions">1. Find some friends<br>2.Select a theme<br>3.Everyone chooses a song<br>4.Guess who added which song</div>
+<br>
+<br>
+<div id ='searchelement' class="searchelements"></div>
+<div id='Navbuttons' class="navbuttons"></div>
+<div id='main' class="main"><button id="newgame" class="myButton1" onclick="tryclear()">New Game</button></div>
+
+        </div>
+        <footer id="footer"> Test</footer>
+      </div>
 
 </html>
 
@@ -18,16 +34,20 @@ currentVids = []
 
 function newgame (){
 
+   // var Player = document.createElement("Player")
     var Searchbox = document.createElement("Searchbox")
     var SubmitSearch = document.createElement("SubmitSearch")
-    
+    var elem = document.getElementById('searchelement');
 
-    Searchbox.innerHTML = "<input id=\"searchbox\" type=\"text\" placeholder=\"Search..\" name=\"search\">"
-    SubmitSearch.innerHTML = "<button id=\"searchsubmit\" type=\"submit\" onclick=\"httpGet()\"><i class=\"fa fa-search\"></i></button>"
+   // Player.innerHTML = "<div id = \"playercount\">\"Player\"" + (searchcount+1) + "\"Search a song\" </div>"
+    Searchbox.innerHTML = "<input class=\"inputbox\" id=\"searchbox\" type=\"text\" autocomplete=\"off\" placeholder=\"Search..\" name=\"search\">"
+    SubmitSearch.innerHTML = "<button class=\"inputbutton\" id=\"searchsubmit\" type=\"submit\" onclick=\"httpGet()\"><i class=\"fa fa-search\"></button>"
     
-
+   // document.getElementById("searchelement").appendChild(Player)
     document.getElementById("searchelement").appendChild(Searchbox)
     document.getElementById("searchelement").appendChild(SubmitSearch)
+    elem.style.setProperty('padding-bottom','10%','');
+
     
 }
 
@@ -46,12 +66,12 @@ function httpGet()
 
 function renderChoice(data){
 
-    if (searchcount != 0) {
-        document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
-    }
+   
+    document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
+    
     if (searchcount == 1) {
         var Finished = document.createElement("Finished")
-        Finished.innerHTML = "<button id=\"finished\" class=\"myButton\" onclick=\"finished()\">Finished</button>"
+        Finished.innerHTML = "<button id=\"finished\" class=\"myButton\" onclick=\"finished()\">Finished</button><br>"
         document.getElementById("Navbuttons").appendChild(Finished)
     }
 
@@ -64,7 +84,7 @@ for (let index = 0; index < data.items.length; index++) {
     titlefull = data.items[index].snippet.title 
     channelTitle = data.items[index].snippet.channelTitle
 
-    videoinfo.innerHTML = titlefull+" ----- "+channelTitle+ "<br><img src=\""+ thumburl +"\" alt=\""+channelTitle+"\">"+"<button id=" + index  + "\" class=\"myButton\" onclick=\"setchoice("+ index +")\">✓</button>"
+    videoinfo.innerHTML = "<strong>" +titlefull+"</strong>"+"<br>"+channelTitle+ "<br><img src=\""+ thumburl +"\" alt=\""+channelTitle+"\"><br><br>"+"<button id=" + index  + "\" class=\"myButton\" onclick=\"setchoice("+ index +")\">✓</button>"
 
 
     ytinfoframe.innerHTML += "<br>"
@@ -76,7 +96,6 @@ for (let index = 0; index < data.items.length; index++) {
 
     document.getElementById("main").appendChild(ytinfoframe)
 }
-searchcount += 1 
 }
 
 function setchoice (choice){
@@ -84,7 +103,7 @@ function setchoice (choice){
 urlchoice = currentVids[choice].id.videoId
 YoutubeVidChoiceArray.push(urlchoice)
 document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
-
+searchcount += 1 
 }
 
 function finished(){
@@ -134,9 +153,10 @@ function next(){
 }
 
 function tryclear(){
-
+    instructions = document.getElementById('instructions') // mayvbe have to do a try here 
     var div = document.getElementById('main');
     div.innerHTML = ""
+    instructions.innerHTML = ""
     newgame()
 }
 
@@ -149,22 +169,95 @@ function shuffleArray(array) {
     }
 }
 
+
+
+addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+   event.preventDefault();
+   document.getElementById("searchsubmit").click();
+  }
+});
+
+
 </script>
 
 <style>
+@charset "utf-8";
 
 .ytinfoframe{
 
-width: 100%;
+width: 80%;
 display: block;
+margin-left: auto;
+margin-right: auto;
 box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
 margin-bottom: 30px;
 padding: 10px;
+font-family: Arial, Helvetica, sans-serif;
 
 }
 
 .videoinfo{
    font-size: 20px;
+}
+.main{
+    text-align: center;
+}
+
+.logoimg{
+    
+    width: 60%;
+    height: auto;
+}
+.logo{
+
+    text-align: center;
+}
+
+.instructions{
+    text-align: center;
+    font-size: 4vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 2.5rem;    /* Footer height */
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;            /* Footer height */
+}
+
+
+.myButton1 {
+    width: 40%;
+    height: 10%;
+	background-color:#44c767;
+	border-radius:17px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:4vw;
+	padding:8px 30px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.myButton1:hover {
+	background-color:#5cbf2a;
+}
+.myButton1:active {
+	position:relative;
+	top:1px;
 }
 
 .myButton {
@@ -175,7 +268,7 @@ padding: 10px;
 	cursor:pointer;
 	color:#ffffff;
 	font-family:Arial;
-	font-size:24px;
+	font-size:40px;
 	padding:8px 30px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #2f6627;
@@ -188,5 +281,43 @@ padding: 10px;
 	top:1px;
 }
 
+.inputbox[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
 
+.inputbutton {
+  float: left;
+  width: 20%;
+  padding: 11.5px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+.inputbutton:hover {
+  background: #0b7dda;
+}
+
+.inputbox::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.searchelements{
+    margin:auto;
+    max-width:60%;
+    
+}
+.navbuttons{
+    text-align: center;
+}
 </style>
