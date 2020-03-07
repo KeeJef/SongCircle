@@ -10,11 +10,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="logo"><a href="SongGuesser.html"><img class="logoimg" src="songcircle.png" alt="SongcircleLogo"></a></div>
-<br>
-<br>
+
 <div id="instructions" class="instructions">1. Find some friends<br>2.Select a theme<br>3.Everyone chooses a song<br>4.Guess who added which song</div>
-<br>
-<br>
+
+<div id = "PlayerCount" class="playercount"></div>
 <div id ='searchelement' class="searchelements"></div>
 <div id='Navbuttons' class="navbuttons"></div>
 <div id='main' class="main"><button id="newgame" class="myButton1" onclick="tryclear()">New Game</button></div>
@@ -104,14 +103,18 @@ urlchoice = currentVids[choice].id.videoId
 YoutubeVidChoiceArray.push(urlchoice)
 document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
 searchcount += 1 
+
+playercount = document.getElementById("PlayerCount")
+playercount.innerHTML = "Player number " + (searchcount+1) + " Please search for a new song"
+
 }
 
 function finished(){
     document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
     document.getElementById("finished").remove()
-    document.getElementById("searchbox").remove()
-    document.getElementById("searchsubmit").remove()
-    shuffleArray(YoutubeVidChoiceArray)
+    document.getElementById("searchelement").remove()
+    document.getElementById("PlayerCount").remove()
+
     renderOne()
 }
 
@@ -128,13 +131,16 @@ var infopannel = document.createElement("infopannel")
 var videoplayer = document.createElement("videoplayer")
 var buttons = document.createElement("buttonspane")
 
-videoplayer.innerHTML = "<iframe width=\"420\" height=\"345\" src=\"https://www.youtube.com/embed/"+ YoutubeVidChoiceArray[choiceiteration] +"\"></iframe>"
-buttons.innerHTML = "<button id=\"myButton\" class=\"myButton\" onclick=\"next()\">Next</button>"
-infopannel.innerHTML = "You have " + (YoutubeVidChoiceArray.length - choiceiteration ) + " Videos to go for this round"
+videoplayer.innerHTML = "<iframe width=\"560\" height=\"340\" src=\"https://www.youtube.com/embed/"+ YoutubeVidChoiceArray[choiceiteration] +"\"></iframe><br>"
+buttons.innerHTML = "<button id=\"myButton\" class=\"myButton\" onclick=\"next()\">Next</button><br>"
+infopannel.innerHTML = "Videos have now been shuffled! <br> <br> You have " + (YoutubeVidChoiceArray.length - choiceiteration ) + " Videos to go for this round"
 
 videoplayer.id = "videoplayer"
+videoplayer.className="videoplayer"
 buttons.id = "buttonspane"
+
 infopannel.id = "infopannel"
+infopannel.classList ="infopannel"
 
 document.getElementById("main").appendChild(infopannel)
 document.getElementById("main").appendChild(videoplayer)
@@ -210,7 +216,7 @@ font-family: Arial, Helvetica, sans-serif;
     height: auto;
 }
 .logo{
-
+    padding-bottom: 20px;
     text-align: center;
 }
 
@@ -218,6 +224,7 @@ font-family: Arial, Helvetica, sans-serif;
     text-align: center;
     font-size: 4vw;
     font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 20px;
 }
 
 #page-container {
@@ -319,5 +326,35 @@ font-family: Arial, Helvetica, sans-serif;
 }
 .navbuttons{
     text-align: center;
+}
+.playercount{
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 3.5vw;
+    padding-bottom: 8px;
+}
+.infopannel{
+    text-align: center;
+    font-size: 3.5vw;
+}
+
+.RepoLoadtext{
+  text-align: center; 
+  font-size: 20px;
+}
+
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  margin: auto;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
