@@ -1,22 +1,35 @@
 <html>
 <!-- Load icon library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<input id="searchbox" type="text" placeholder="Search.." name="search">
-<button id="searchsubmit" type="submit" onclick="httpGet()"><i class="fa fa-search"></i></button>
+<div>Song Guesser</div>
+<div id = 'searchelement'></div>
 <br>
-<button id="finished" class="myButton" onclick="finished()">Finished</button>
-
-<div id='main'></div>
+<div id='Navbuttons'></div>
+<div id='main'><button id="newgame" class="myButton" onclick="tryclear()">New Game</button></div>
 
 </html>
 
 <script>
 searchcount = 0
-googke = "AIzaSyA6UQVaGsYD85f_ZWDHk78GIl4RAqUwASE" //apparently its fine to expose your JS api key
+googke = "AIzaSyA6UQVaGsYD85f_ZWDHk78GIl4RAqUwASE" 
 YoutubeVidChoiceArray = []
 choiceiteration = 0
 currentVids = []
+
+function newgame (){
+
+    var Searchbox = document.createElement("Searchbox")
+    var SubmitSearch = document.createElement("SubmitSearch")
+    
+
+    Searchbox.innerHTML = "<input id=\"searchbox\" type=\"text\" placeholder=\"Search..\" name=\"search\">"
+    SubmitSearch.innerHTML = "<button id=\"searchsubmit\" type=\"submit\" onclick=\"httpGet()\"><i class=\"fa fa-search\"></i></button>"
+    
+
+    document.getElementById("searchelement").appendChild(Searchbox)
+    document.getElementById("searchelement").appendChild(SubmitSearch)
+    
+}
 
 function httpGet()
 {
@@ -35,7 +48,11 @@ function renderChoice(data){
 
     if (searchcount != 0) {
         document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
-
+    }
+    if (searchcount == 1) {
+        var Finished = document.createElement("Finished")
+        Finished.innerHTML = "<button id=\"finished\" class=\"myButton\" onclick=\"finished()\">Finished</button>"
+        document.getElementById("Navbuttons").appendChild(Finished)
     }
 
 for (let index = 0; index < data.items.length; index++) {
@@ -83,7 +100,7 @@ function renderOne(){
 
 if (choiceiteration == YoutubeVidChoiceArray.length) {
     var div = document.getElementById('main');
-    div.innerHTML += "You're finished"+"<br><button id=\"newround\" class=\"myButton\" onclick=\"next()\">New Round</button>"
+    div.innerHTML = "You're finished"+"<br><button id=\"myButton\" class=\"myButton\" onclick=\"tryclear()\">NewRound</button>"
 
     return
 }
@@ -114,6 +131,13 @@ function next(){
     document.getElementById("infopannel").remove()
 
     renderOne()
+}
+
+function tryclear(){
+
+    var div = document.getElementById('main');
+    div.innerHTML = ""
+    newgame()
 }
 
 function shuffleArray(array) {
