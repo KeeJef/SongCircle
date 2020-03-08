@@ -6,9 +6,10 @@
           <!-- all other page content -->
 
 
-
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<br>
 <div class="logo"><a href="SongGuesser.html"><img class="logoimg" src="songcircle.png" alt="SongcircleLogo"></a></div>
 
 <div id="instructions" class="instructions">1. Find some friends<br>2.Select a theme<br>3.Everyone chooses a song<br>4.Guess who added which song</div>
@@ -19,7 +20,7 @@
 <div id='main' class="main"><button id="newgame" class="myButton1" onclick="tryclear()">New Game</button></div>
 
         </div>
-        <footer id="footer"> Test</footer>
+        <footer id="footer"><a href="https://github.com/KeeJef/SongGuesser"><img class="footerimg" src="Github.png" alt="GithubLogo"></a></footer>
       </div>
 
 </html>
@@ -39,13 +40,13 @@ function newgame (){
     var elem = document.getElementById('searchelement');
 
    // Player.innerHTML = "<div id = \"playercount\">\"Player\"" + (searchcount+1) + "\"Search a song\" </div>"
-    Searchbox.innerHTML = "<input class=\"inputbox\" id=\"searchbox\" type=\"text\" autocomplete=\"off\" placeholder=\"Search..\" name=\"search\">"
+    Searchbox.innerHTML = "<input class=\"inputbox\" id=\"searchbox\" type=\"text\" autocomplete=\"off\" placeholder=\"Search for Songs..\" name=\"search\">"
     SubmitSearch.innerHTML = "<button class=\"inputbutton\" id=\"searchsubmit\" type=\"submit\" onclick=\"httpGet()\"><i class=\"fa fa-search\"></button>"
     
    // document.getElementById("searchelement").appendChild(Player)
     document.getElementById("searchelement").appendChild(Searchbox)
     document.getElementById("searchelement").appendChild(SubmitSearch)
-    elem.style.setProperty('padding-bottom','10%','');
+    elem.style.setProperty('padding-bottom','5px','');
 
     
 }
@@ -70,7 +71,7 @@ function renderChoice(data){
     
     if (searchcount == 1) {
         var Finished = document.createElement("Finished")
-        Finished.innerHTML = "<button id=\"finished\" class=\"myButton\" onclick=\"finished()\">Finished</button><br>"
+        Finished.innerHTML = "<button id=\"finished\" class=\"myButton2\" onclick=\"finished()\">Finished</button><br>"
         document.getElementById("Navbuttons").appendChild(Finished)
     }
 
@@ -83,7 +84,7 @@ for (let index = 0; index < data.items.length; index++) {
     titlefull = data.items[index].snippet.title 
     channelTitle = data.items[index].snippet.channelTitle
 
-    videoinfo.innerHTML = "<strong>" +titlefull+"</strong>"+"<br>"+channelTitle+ "<br><img src=\""+ thumburl +"\" alt=\""+channelTitle+"\"><br><br>"+"<button id=" + index  + "\" class=\"myButton\" onclick=\"setchoice("+ index +")\">✓</button>"
+    videoinfo.innerHTML = "<strong>" +titlefull+"</strong>"+"<br>"+channelTitle+ "<br><img class=\"thumbnail\" src=\""+ thumburl +"\" alt=\""+channelTitle+"\"><br><br>"+"<button id=" + index  + "\" class=\"myButton\" onclick=\"setchoice("+ index +")\">✓</button>"
 
 
     ytinfoframe.innerHTML += "<br>"
@@ -105,7 +106,7 @@ document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
 searchcount += 1 
 
 playercount = document.getElementById("PlayerCount")
-playercount.innerHTML = "Player number " + (searchcount+1) + " Please search for a new song"
+playercount.innerHTML = "Player number " + (searchcount+1) + " please search for a new song"
 
 }
 
@@ -114,7 +115,7 @@ function finished(){
     document.getElementById("finished").remove()
     document.getElementById("searchelement").remove()
     document.getElementById("PlayerCount").remove()
-
+    shuffleArray(YoutubeVidChoiceArray)
     renderOne()
 }
 
@@ -131,7 +132,7 @@ var infopannel = document.createElement("infopannel")
 var videoplayer = document.createElement("videoplayer")
 var buttons = document.createElement("buttonspane")
 
-videoplayer.innerHTML = "<iframe width=\"560\" height=\"340\" src=\"https://www.youtube.com/embed/"+ YoutubeVidChoiceArray[choiceiteration] +"\"></iframe><br>"
+videoplayer.innerHTML = "<iframe class=\"iframeclass\" src=\"https://www.youtube.com/embed/"+ YoutubeVidChoiceArray[choiceiteration] +"\"></iframe><br>"
 buttons.innerHTML = "<button id=\"myButton\" class=\"myButton\" onclick=\"next()\">Next</button><br>"
 infopannel.innerHTML = "Videos have now been shuffled! <br> <br> You have " + (YoutubeVidChoiceArray.length - choiceiteration ) + " Videos to go for this round"
 
@@ -188,7 +189,7 @@ addEventListener("keyup", function(event) {
 </script>
 
 <style>
-@charset "utf-8";
+
 
 .ytinfoframe{
 
@@ -212,7 +213,7 @@ font-family: Arial, Helvetica, sans-serif;
 
 .logoimg{
     
-    width: 60%;
+    width: 50%;
     height: auto;
 }
 .logo{
@@ -239,8 +240,12 @@ font-family: Arial, Helvetica, sans-serif;
 #footer {
   position: absolute;
   bottom: 0;
+  text-align: center;
   width: 100%;
-  height: 2.5rem;            /* Footer height */
+  height: 3.5rem;            /* Footer height */
+}
+.footerimg{
+  height: 3.3rem;
 }
 
 
@@ -254,7 +259,7 @@ font-family: Arial, Helvetica, sans-serif;
 	cursor:pointer;
 	color:#ffffff;
 	font-family:Arial;
-	font-size:4vw;
+	font-size:3.5vw;
 	padding:8px 30px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #2f6627;
@@ -263,6 +268,27 @@ font-family: Arial, Helvetica, sans-serif;
 	background-color:#5cbf2a;
 }
 .myButton1:active {
+	position:relative;
+	top:1px;
+}
+
+.myButton2 {
+	background-color:#44c767;
+	border-radius:17px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:3.5vw;
+	padding:8px 30px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+.myButton2:hover {
+	background-color:#5cbf2a;
+}
+.myButton2:active {
 	position:relative;
 	top:1px;
 }
@@ -341,6 +367,16 @@ font-family: Arial, Helvetica, sans-serif;
 .RepoLoadtext{
   text-align: center; 
   font-size: 20px;
+}
+
+.iframeclass{
+  width: 80%;
+  height: 50%;
+}
+
+.thumbnail{
+  width: 0%;
+  height: auto;
 }
 
 .loader {
