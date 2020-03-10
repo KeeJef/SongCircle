@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <br>
-<div class="logo"><a href="SongGuesser.html"><img class="logoimg" src="songcircle.png" alt="SongcircleLogo"></a></div>
+<div class="logo"><a href="index.html"><img class="logoimg" src="songcircle.png" alt="SongcircleLogo"></a></div>
 
 <div id="instructions" class="instructions">1. Find some friends<br>2.Select a theme<br>3.Everyone chooses a song<br>4.Guess who added which song</div>
 
@@ -27,12 +27,12 @@
 
 <script>
 searchcount = 0
-googke = "AIzaSyA6UQVaGsYD85f_ZWDHk78GIl4RAqUwASE" 
+googke = "" 
 YoutubeVidChoiceArray = []
 choiceiteration = 0
 currentVids = []
 
-function newgame (){
+function newgame(){
 
    // var Player = document.createElement("Player")
     var Searchbox = document.createElement("Searchbox")
@@ -46,9 +46,14 @@ function newgame (){
    // document.getElementById("searchelement").appendChild(Player)
     document.getElementById("searchelement").appendChild(Searchbox)
     document.getElementById("searchelement").appendChild(SubmitSearch)
-    elem.style.setProperty('padding-bottom','5px','');
-
+    elem.innerHTML += "<br><br><br>"
     
+
+}
+
+function refresh(){
+  location.reload()
+
 }
 
 function httpGet()
@@ -123,7 +128,7 @@ function renderOne(){
 
 if (choiceiteration == YoutubeVidChoiceArray.length) {
     var div = document.getElementById('main');
-    div.innerHTML = "You're finished"+"<br><button id=\"myButton\" class=\"myButton\" onclick=\"tryclear()\">NewRound</button>"
+    div.innerHTML = "You're finished"+"<br><button id=\"myButton\" class=\"myButton\" onclick=\"refresh()\">New Round</button>"
 
     return
 }
@@ -160,10 +165,16 @@ function next(){
 }
 
 function tryclear(){
-    instructions = document.getElementById('instructions') // mayvbe have to do a try here 
+
+    try {
+      instructions = document.getElementById('instructions')
+      instructions.innerHTML = ""
+    } catch (error) {
+      
+    }
+     // mayvbe have to do a try here 
     var div = document.getElementById('main');
     div.innerHTML = ""
-    instructions.innerHTML = ""
     newgame()
 }
 
@@ -375,7 +386,7 @@ font-family: Arial, Helvetica, sans-serif;
 }
 
 .thumbnail{
-  width: 0%;
+  width: 60%;
   height: auto;
 }
 
