@@ -1,6 +1,7 @@
 <html>
-<div id="page-container">
-  <div id="content-wrap">
+
+<body class="Site" id="Site">
+  <div class="Site-content">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,11 +15,11 @@
     <div id='searchelement' class="searchelements"></div>
     <div id='Navbuttons' class="navbuttons"></div>
     <div id='main' class="main"><button id="newgame" class="myButton1" onclick="tryclear()">New Game</button></div>
-
   </div>
   <footer id="footer"><a href="https://github.com/KeeJef/SongGuesser"><img class="footerimg" src="Github.png"
         alt="GithubLogo"></a></footer>
-</div>
+  </div>
+</body>
 
 </html>
 
@@ -55,6 +56,7 @@
 
   function httpGet() {
     searchvar = document.getElementById("searchbox").value
+    document.getElementById("Site").style.overflow = "auto";
     theUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=' + searchvar + '&key=' + googke //remove channel results? 
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
@@ -112,6 +114,7 @@
   }
 
   function finished() {
+    document.getElementById("Site").style.display = "block";
     document.querySelectorAll('.ytinfoframe').forEach(e => e.remove());
     document.getElementById("finished").remove()
     document.getElementById("searchelement").remove()
@@ -133,8 +136,8 @@
     var videoplayer = document.createElement("videoplayer")
     var buttons = document.createElement("buttonspane")
 
-    videoplayer.innerHTML = "<iframe class=\"iframeclass\" src=\"https://www.youtube.com/embed/" + YoutubeVidChoiceArray[choiceiteration] + "\"></iframe><br>"
-    buttons.innerHTML = "<button id=\"myButton\" class=\"myButton\" onclick=\"next()\">Next</button><br>"
+    videoplayer.innerHTML = "<iframe class=\"iframeclass\" src=\"https://www.youtube.com/embed/" + YoutubeVidChoiceArray[choiceiteration] + "\"></iframe><br><br>"
+    buttons.innerHTML = "<button id=\"myButton\" class=\"myButton\" onclick=\"next()\">Next</button><br><br>"
     infopannel.innerHTML = "Videos have now been shuffled! <br> <br> You have " + (YoutubeVidChoiceArray.length - choiceiteration) + " Videos to go for this round"
 
     videoplayer.id = "videoplayer"
@@ -196,11 +199,17 @@
 </script>
 
 <style>
+  .Site {
+    display: flex;
+    min-height: 100%;
+    margin: 0;
+    overflow: hidden;
+    flex-direction: column;
+  }
 
-  body {
-        overflow-x: hidden; /* Hide scrollbars */
-        margin: 0;
-      }
+  .Site-content {
+    flex: 1;
+  }
 
   .ytinfoframe {
 
@@ -241,22 +250,14 @@
     padding-bottom: 20px;
   }
 
-  #page-container {
-    
-    min-height: 100vh;
-  }
-
-  #content-wrap {
-    padding-bottom: 2.5rem;
-    /* Footer height */
-  }
-
   #footer {
-    position: absolute;
-    text-align: center;
+    left: 0;
+    bottom: 0;
+    padding-bottom: 10px;
     width: 100%;
-    height: 3.5rem;
-    /* Footer height */
+    color: white;
+    text-align: center;
+
   }
 
   .footerimg {
