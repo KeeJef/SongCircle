@@ -62,6 +62,7 @@
     xmlHttp.open("GET", theUrl, false); // false for synchronous request
     xmlHttp.send(null);
     data = JSON.parse(xmlHttp.responseText)
+    console.log(data)
     currentVids = []
     currentVids = data.items
     renderChoice(data)
