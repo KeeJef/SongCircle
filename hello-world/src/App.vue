@@ -1,12 +1,15 @@
 <template>
-  <div id="logo" class="container flex justify-center mx-auto pb-10">
+<body class="p-2">
+  
+
+  <div id="logo" class="container flex justify-center mx-auto pb-5">
     <img
       src="./assets/songcircle.png"
       alt="SongCircle Logo"
     />
   </div>
 
-  <div class="container max-w-[490px] bg-slate-200 rounded flex-col justify-center mx-auto px-2 py-2">
+  <div class="container max-w-[490px] bg-slate-200 rounded flex-col justify-center mx-auto px-2 py-2 m-1">
     <div class="">
       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Enter your name" autocomplete="off"/>
     </div>
@@ -21,7 +24,15 @@
     
   </div>
 
+   <div class="container max-w-[490px] bg-slate-200 rounded flex-col justify-center mx-auto px-2 py-2">
+    
+    <div>News</div>
+    <div>About</div>
+    <div>How to Play</div>
+  </div>
+
   <hello-world></hello-world>
+  </body>
 </template>
 
 <script>
@@ -58,6 +69,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 20px;
 }
 </style>
