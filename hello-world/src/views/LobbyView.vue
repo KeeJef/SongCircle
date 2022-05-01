@@ -1,11 +1,13 @@
 <template>
-  <body class="p-2">
-      lobby
-  </body>
+  <div class="p-2 flex flex-col sm:flex-row justify-center items-center">
+      <lobbySettings></lobbySettings>
+      <avatarLobbyDisplay></avatarLobbyDisplay>
+  </div>
 </template>
 
 <script>
-
+import lobbySettings from "../components/lobbySettings.vue";
+import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
 
 export default {
   name: "LobbyView",
@@ -14,13 +16,15 @@ export default {
     };
   },
   components: {
+    lobbySettings,
+    avatarLobbyDisplay,
   },
   methods: {
 
   },
   async mounted() {
 
-    
+
   },
 };
 </script>

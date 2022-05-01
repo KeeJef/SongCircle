@@ -1,10 +1,10 @@
 <template>
-  <body class="p-2">
+  <div class="p-2">
     <div id="logo" class="container flex justify-center mx-auto pb-5">
       <img src="../assets/songcircle.png" alt="SongCircle Logo" />
     </div>
     <gatherUserInfo></gatherUserInfo>
-  </body>
+  </div>
 </template>
 
 <script>

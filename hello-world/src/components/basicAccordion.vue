@@ -4,11 +4,11 @@
       @click="toggleAccordion()"
       class="flex items-center space-x-3"
       :aria-expanded="isOpen"
-      :aria-controls="`collapse${_uid}`">
+      >
       <slot name="title" />
     </button>
 
-    <div v-show="isOpen" :id="`collapse${_uid}`">
+    <div v-show="isOpen">
       <slot name="content" />
     </div>
   </div>
@@ -19,7 +19,7 @@ export default {
     name: "basicAccordion",
   data() {
     return {
-      isOpen: this.isOpenInit
+      isOpen: this.isOpenInit,
     };
   },
 props: {
