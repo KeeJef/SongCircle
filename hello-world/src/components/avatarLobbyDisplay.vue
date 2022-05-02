@@ -1,39 +1,27 @@
 <template>
   <div
-    class="container max-w-[490px] bg-white rounded flex-col justify-center px-2 py-2 m-1">
-    <div class="">
-      <input
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="username"
-        type="text"
-        placeholder="Enter your name"
-        autocomplete="off" />
-    </div>
-
-
-    <div>
-      <button
-        @click="$router.push('lobby')"
-        type="button"
-        class="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-        Create New Room
-      </button>
-    </div>
+    class="container max-w-[490px] bg-white rounded flex justify-center px-2 py-2 m-1">
+    <playerComp :compPlayerInfo="playerInfo"></playerComp>
+        <playerComp :compPlayerInfo="playerInfo"></playerComp>
+    
   </div>
 </template>
 
 <script>
+import { usePlayerInfo } from "@/store/index";
+import playerComp from "./playerComp";
+
 export default {
-    name: "avatarLobbyDisplay",
+  name: "avatarLobbyDisplay",
+  setup() {
+    const playerInfo = usePlayerInfo();
+    return { playerInfo };
+  },
   data() {
-    return {
-
-    };
+    return {};
   },
-props: {
-
-},
-  methods: {
-  },
+  components:{playerComp},
+  props: {},
+  methods: {},
 };
 </script>

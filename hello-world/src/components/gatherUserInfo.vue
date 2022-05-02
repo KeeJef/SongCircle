@@ -8,12 +8,12 @@
         type="text"
         placeholder="Enter your name"
         autocomplete="off"
-        v-model="playerName" />
+        v-model="playerInfo.playerName" />
     </div>
 
     <div class="flex justify-center py-10">
       <div class="text-5xl cursor-pointer select-none pr-10" @click="pickRandomEmoji">&lt;</div>
-      <div class="text-8xl min-w-[30%] select-none">{{ playerEmoji }}</div>
+      <div class="text-8xl min-w-[30%] select-none">{{ playerInfo.playerEmoji }}</div>
       <div
         @click="pickRandomEmoji"
         class="text-5xl cursor-pointer select-none pl-10">
@@ -80,10 +80,15 @@
 
 <script>
 import { emojiList } from "../composables/externalFunctions.js";
+import {usePlayerInfo} from '@/store/index';
 import basicAccordion from "./basicAccordion";
 
 export default {
   name: "gatherUserInfo",
+  setup() {
+    const playerInfo = usePlayerInfo()
+    return {playerInfo}
+  },
   data() {
     return {
       playerEmoji: "",
@@ -96,8 +101,8 @@ export default {
   methods: {
     //function for picking random emoji
     pickRandomEmoji() {
-      this.playerEmoji =
-        emojiList[Math.floor(Math.random() * emojiList.length)];
+      this.playerEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+      this.playerInfo.playerEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
     },
   },
   async mounted() {
