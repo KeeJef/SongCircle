@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container max-w-[490px] min-h-[222px] bg-slate-200 rounded flex-col justify-center px-2 py-2 m-1">
+    class="container max-w-[490px] bg-white rounded flex-col justify-center px-2 py-2 m-1">
     <div class="">
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

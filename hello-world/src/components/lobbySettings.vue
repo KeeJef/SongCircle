@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container max-w-[490px] bg-slate-200 rounded flex-col justify-center px-2 py-2 m-1">
+    class="container max-w-[490px] bg-white rounded flex-col justify-center px-2 py-2 m-1">
     <div class="">
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -12,7 +12,7 @@
 
     <div class="flex justify-center py-10">
       <div class="text-5xl cursor-pointer select-none pr-10">&lt;</div>
-      <div class="text-8xl min-w-[30%] select-none">{{ playerEmoji }}</div>
+      <div class="text-8xl min-w-[30%] select-none"></div>
       <div
         @click="pickRandomEmoji"
         class="text-5xl cursor-pointer select-none pl-10">

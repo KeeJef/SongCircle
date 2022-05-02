@@ -1,17 +1,18 @@
 <template>
   <div
-    class="container max-w-[490px] bg-slate-200 rounded flex-col justify-center mx-auto px-2 py-2 m-1">
+    class="container max-w-[490px] bg-white rounded flex-col justify-center mx-auto px-2 py-2 m-1">
     <div class="">
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
         placeholder="Enter your name"
-        autocomplete="off" />
+        autocomplete="off"
+        v-model="playerName" />
     </div>
 
     <div class="flex justify-center py-10">
-      <div class="text-5xl cursor-pointer select-none pr-10">&lt;</div>
+      <div class="text-5xl cursor-pointer select-none pr-10" @click="pickRandomEmoji">&lt;</div>
       <div class="text-8xl min-w-[30%] select-none">{{ playerEmoji }}</div>
       <div
         @click="pickRandomEmoji"
@@ -30,10 +31,10 @@
   </div>
 
   <div
-    class="container max-w-[490px] bg-slate-200 rounded text-left flex-col justify-center mx-auto px-2 py-2">
+    class="container max-w-[490px] bg-white rounded text-left flex-col justify-center mx-auto px-2 py-2">
     <basicAccordion :isOpenInit="true" class="">
       <template v-slot:title>
-        <span class="text-2xl mt-0 mb-2 font-bold">News</span>
+        <span class="text-2xl mt-0 mb-2 font-bold hover:underline">News</span>
       </template>
       <template v-slot:content>
         <div
@@ -59,7 +60,7 @@
 
     <basicAccordion :isOpenInit="false" class="">
       <template v-slot:title>
-        <span class="text-2xl mt-0 mb-2 font-bold">About</span>
+        <span class="text-2xl mt-0 mb-2 font-bold hover:underline">About</span>
       </template>
       <template v-slot:content>
         <div>About info</div>
@@ -68,7 +69,7 @@
 
     <basicAccordion :isOpenInit="false" class="">
       <template v-slot:title>
-        <span class="text-2xl mt-0 mb-2 font-bold">How to play</span>
+        <span class="text-2xl mt-0 mb-2 font-bold hover:underline">How to play</span>
       </template>
       <template v-slot:content>
         <div>How to play info</div>
@@ -86,6 +87,7 @@ export default {
   data() {
     return {
       playerEmoji: "",
+      playerName: "",
     };
   },
   components: {
