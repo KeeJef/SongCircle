@@ -1,7 +1,7 @@
 <template>
-  <div class="max-w-[30%]">
-    <div class="-rotate-45 text-5xl py-2 min-w-[30%] select-none">👑</div>
-    <div class="text-8xl py-2 min-w-[30%] select-none">
+  <div class="w-fit pl-4">
+    <div class="w-fit -translate-x-5 translate-y-5 -rotate-45 text-5xl select-none">👑</div>
+    <div class="w-fit text-8xl pb-2 select-none">
       {{ compPlayerInfo.playerEmoji }}
     </div>
     <div class="text-base">{{ compPlayerInfo.playerName }}</div>

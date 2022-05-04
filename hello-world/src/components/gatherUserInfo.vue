@@ -12,17 +12,24 @@
     </div>
 
     <div class="flex justify-center py-10">
-      <div class="text-5xl cursor-pointer select-none pr-10" @click="pickRandomEmoji">&lt;</div>
-      <div class="text-8xl min-w-[30%] select-none">{{ playerInfo.playerEmoji }}</div>
       <div
-        @click="pickRandomEmoji"
+        class="text-5xl cursor-pointer select-none pr-10"
+        @click="pickEmoji(false)">
+        &lt;
+      </div>
+      <div class="text-8xl min-w-[30%] select-none">
+        {{ playerInfo.playerEmoji }}
+      </div>
+      <div
+        @click="pickEmoji(true)"
         class="text-5xl cursor-pointer select-none pl-10">
         &gt;
       </div>
     </div>
 
     <div>
-      <button @click="$router.push ('lobby')"
+      <button
+        @click="$router.push('lobby')"
         type="button"
         class="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
         Create New Room
@@ -69,7 +76,9 @@
 
     <basicAccordion :isOpenInit="false" class="">
       <template v-slot:title>
-        <span class="text-2xl mt-0 mb-2 font-bold hover:underline">How to play</span>
+        <span class="text-2xl mt-0 mb-2 font-bold hover:underline"
+          >How to play</span
+        >
       </template>
       <template v-slot:content>
         <div>How to play info</div>
@@ -80,19 +89,19 @@
 
 <script>
 import { emojiList } from "../composables/externalFunctions.js";
-import {usePlayerInfo} from '@/store/index';
+import { usePlayerInfo } from "@/store/index";
 import basicAccordion from "./basicAccordion";
 
 export default {
   name: "gatherUserInfo",
   setup() {
-    const playerInfo = usePlayerInfo()
-    return {playerInfo}
+    const playerInfo = usePlayerInfo();
+    return { playerInfo };
   },
   data() {
     return {
-      playerEmoji: "",
-      playerName: "",
+      emojiArrayPosition: 0,
+      shuffledEmojiList: [],
     };
   },
   components: {
@@ -100,13 +109,32 @@ export default {
   },
   methods: {
     //function for picking random emoji
-    pickRandomEmoji() {
-      this.playerEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
-      this.playerInfo.playerEmoji = emojiList[Math.floor(Math.random() * emojiList.length)];
+    pickEmoji(direction) {
+
+      if (direction && this.emojiArrayPosition < this.shuffledEmojiList.length) {
+        this.emojiArrayPosition++;
+        this.playerInfo.playerEmoji =
+          this.shuffledEmojiList[this.emojiArrayPosition];
+      } else if (direction == false & this.emojiArrayPosition > 0) {
+        this.emojiArrayPosition--;
+        this.playerInfo.playerEmoji =
+          this.shuffledEmojiList[this.emojiArrayPosition];
+      }
+    },
+    shuffleArray(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+      }
+      return array;
     },
   },
   async mounted() {
-    this.pickRandomEmoji();
+    this.shuffledEmojiList = await this.shuffleArray(emojiList);
+    this.playerInfo.playerEmoji =
+      this.shuffledEmojiList[this.emojiArrayPosition];
   },
 };
 </script>
