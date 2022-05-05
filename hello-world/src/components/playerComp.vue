@@ -4,7 +4,7 @@
     <div class="w-fit text-8xl pb-2 select-none">
       {{ compPlayerInfo.playerEmoji }}
     </div>
-    <div class="text-base">{{ compPlayerInfo.playerName }}</div>
+    <div class="text-base font-bold">{{ compPlayerInfo.playerName }}</div>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container min-h-[264px] max-w-[490px] bg-white rounded flex flex-wrap justify-center px-2 py-2 m-1">
+    class="container min-h-[342px] max-w-[490px] bg-white rounded flex flex-wrap justify-center px-2 py-2 m-1">
     <div class="h-fit text-4xl pb-3">Players</div>
     <div
       class="container max-w-[490px] bg-white rounded flex flex-wrap justify-center px-2 py-2 m-1">

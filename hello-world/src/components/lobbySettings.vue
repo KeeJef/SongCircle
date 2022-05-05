@@ -3,23 +3,11 @@
     class="container max-w-[490px] bg-white rounded flex-col justify-center sm:place-self-start px-2 py-2 m-1">
     <div class="text-4xl pb-3">Settings</div>
     <div class="text-left"><b>Rounds</b></div>
-    <select
-      class="form-select w-full px-3 py-2 my-2 bg-white border-2 border-gray-300 rounded-lg focus:border-green-500"
-      aria-label="Default select example">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
+    <selectSettings :options=[1,2,3,4,5] :isAdmin="this.isAdmin"></selectSettings>
     <div class="text-left"><b>Music Selection time</b></div>
-    <select
-      class="form-select w-full px-3 py-2 my-2 bg-white border-2 border-gray-300 rounded-lg focus:border-green-500"
-      aria-label="Default select example">
-      <option value="30">30 Seconds</option>
-      <option value="60">1 Minute</option>
-      <option value="120">2 Minutes</option>
-    </select>
+    <selectSettings :options="['30 Seconds', '60 Seconds', '120 Seconds']" :isAdmin="this.isAdmin"></selectSettings>
+    <div class="text-left"><b>Theme</b></div>
+    <selectSettings :options="['None','Rock Anthems','Pop Anthems','Rap Music','Electronic Music','Classical Music','Indie Music','Country Music','Musicals','ideo Game Music','70s Music','80s Music','90s Music','00s Music','10s Music']" :isAdmin="this.isAdmin"></selectSettings>
     <div>
       <button
         @click="$router.push('lobby')"
@@ -32,12 +20,21 @@
 </template>
 
 <script>
+import selectSettings from "./selectSettings";
+
 export default {
   name: "lobbySettings",
   data() {
-    return {};
+    return {
+      
+    };
   },
-  props: {},
+  components: {
+    selectSettings,
+  },
+  props: {
+    isAdmin: { type: Boolean },
+  },
   methods: {},
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="p-2">
     <div id="logo" class="container flex justify-center mx-auto pb-5">
-      <img src="../assets/songcircle.png" alt="SongCircle Logo" />
+      <a href="."><img src="../assets/songcircle.png" alt="SongCircle Logo"/></a>
     </div>
     <gatherUserInfo></gatherUserInfo>
   </div>
