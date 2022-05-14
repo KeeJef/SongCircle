@@ -4,7 +4,7 @@
     </div>
   <div class="p-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
       JOIN LOBBY
-      <lobbySettings :isAdmin="true"></lobbySettings>
+      <lobbySettings :isAdmin="false"></lobbySettings>
       <avatarLobbyDisplay></avatarLobbyDisplay>
   </div>
 </template>
@@ -32,7 +32,3 @@ export default {
   },
 };
 </script>
-
-<style>
-
-</style>

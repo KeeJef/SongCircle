@@ -3,7 +3,18 @@ const axios = require('axios').default;
 
 //axios get request async
 
-getSongs()
+call();
+
+
+async function call(params) {
+    for (var i = 0; i < 1000; i++) {
+    await getSongs();
+    console.log("call " + i);
+}
+console.log("done");
+
+}
+
 
 async function getSongs() {
     //axios get request
@@ -13,5 +24,5 @@ async function getSongs() {
         console.log(error);
     }
     
-    console.log(response.data);
+    console.log(response.status + " " + response.headers.date);
 }
