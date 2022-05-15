@@ -12,6 +12,7 @@
 <script>
 import lobbySettings from "../components/lobbySettings.vue";
 import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
+import io from 'socket.io-client'
 
 export default {
   name: "JoinLobbyView",
@@ -27,7 +28,8 @@ export default {
 
   },
   async mounted() {
-
+      var SocketInstance = await io('http://localhost:8000');
+      console.log(SocketInstance)
 
   },
 };

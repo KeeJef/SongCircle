@@ -1,5 +1,13 @@
-const io = require("socket.io")();
+const io = require("socket.io")({
+   cors: {
+     origin: "*",
+     methods: ["GET", "POST"]
+   }
+ });
+
+
 server = io.listen(8000);
+console.log("Running on port " + 8000);
 
 userArrays = []; //This is all being stored in memory which is bad
 server.on('connection', function (socket) {
