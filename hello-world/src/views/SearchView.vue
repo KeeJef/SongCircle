@@ -15,41 +15,52 @@
       background: transparent;
     "></iframe> -->
 
-    <audio controls="">
-<source src="https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/3a/a3/01/3aa30184-78e2-7030-c6e0-d33f3d3e21b7/mzaf_3396140578378232458.plus.aac.p.m4a">
-</audio>
-    
+    <button
+        @click="getSongs"
+        type="button"
+        class="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+        Search
+      </button>
+
+  <audio controls="">
+    <source
+      src="https://audio-ssl.itunes.apple.com/itunes-assets/Music7/v4/3a/a3/01/3aa30184-78e2-7030-c6e0-d33f3d3e21b7/mzaf_3396140578378232458.plus.aac.p.m4a" />
+  </audio>
 </template>
 
 <script>
 import SearchComp from "../components/searchComp.vue";
-import axios from "axios";
+import io from "socket.io-client";
 
 export default {
   name: "SearchView",
   data() {
-    return {};
+    return { 
+      socket: Object 
+      };
   },
   components: {
     SearchComp,
   },
   methods: {
     async getSongs() {
-
-      try {
-        var response = await axios.get(
-          "https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=heart+shaped+box&limit=5&l=en-US"
-        );
-      } catch (error) {
-        console.log(error);
-      }
-
-      console.log(response.data);
+      this.socket.emit("searchMusic", "heart+shaped+box");
     },
   },
-  async mounted(
-) {
-    //this.getSongs()
-},
-};
+  async mounted() {
+
+     try {
+      this.socket = await io("http://localhost:8000");
+    } catch (error) {
+      console.log(error);
+    }
+
+    this.socket.addEventListener({
+      type: 'searchResults',
+      callback: (message) => {
+        console.log('test' + message);
+      }
+    });
+  },
+}
 </script>

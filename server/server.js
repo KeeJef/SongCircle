@@ -1,9 +1,10 @@
+const axios = require('axios').default;
 const io = require("socket.io")({
    cors: {
-     origin: "*",
-     methods: ["GET", "POST"]
+      origin: "*",
+      methods: ["GET", "POST"]
    }
- });
+});
 
 
 server = io.listen(8000);
@@ -22,7 +23,7 @@ server.on('connection', function (socket) {
 
          if (element.RoomName == data.roomname) {
 
-            userObject = {name: data.namewanted, socketid: data.socketid, readyStatus: false, isLeader: data.isLeader, publicKey:data.publicKey, signers:data.signersNumber, threshold:data.thresholdNumber, roomFullStatus: false }
+            userObject = { name: data.namewanted, socketid: data.socketid, readyStatus: false, isLeader: data.isLeader, publicKey: data.publicKey, signers: data.signersNumber, threshold: data.thresholdNumber, roomFullStatus: false }
             element.members.push(userObject);
             return
          }
@@ -31,6 +32,14 @@ server.on('connection', function (socket) {
 
 
 
+   });
+
+   socket.on('searchMusic', function (searchString) {
+      console.log("Searching for " + searchString);
+
+      var response = axios.get("https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" + searchString + "&limit=5&l=en-US");
+
+      socket.emit('searchResults', response)
    });
 
    socket.on('setUsernameExisting', function (data) {
@@ -42,18 +51,18 @@ server.on('connection', function (socket) {
 
          if (element1.RoomName == data.roomname) {
 
-            infoGroup = JSON.parse(data.infoGroup) 
+            infoGroup = JSON.parse(data.infoGroup)
 
             for (let index = 0; index < infoGroup.signingKeys.length; index++) {
                element = infoGroup.signingKeys[index];
 
                //SocketIDS are mapped here which ingores actual socket ID's 
-               userObject = {name: data.namewanted, publicKey:element, socketid: data.socketid, isLeader: data.isLeader, signers:infoGroup.numberOfSigners, threshold:infoGroup.thresholdNumber, roomFullStatus: false, joinstatus : false}
+               userObject = { name: data.namewanted, publicKey: element, socketid: data.socketid, isLeader: data.isLeader, signers: infoGroup.numberOfSigners, threshold: infoGroup.thresholdNumber, roomFullStatus: false, joinstatus: false }
                if (data.pubKey == element) {
                   userObject.joinstatus = true //detects who caller is 
                }
                element1.members.push(userObject);
-               
+
             }
 
             return
@@ -81,7 +90,7 @@ server.on('connection', function (socket) {
          if (room == element) {//dont recreate already created rooms
             return
          } else {
-            var roomObject = { RoomName: room, members: []};
+            var roomObject = { RoomName: room, members: [] };
             userArrays.push(roomObject)
          }
 
@@ -124,18 +133,18 @@ server.on('connection', function (socket) {
 
          if (room.RoomName == data.roomname) {
 
-          for (let index = 0; index < room.members.length; index++) {
+            for (let index = 0; index < room.members.length; index++) {
 
-            if (room.members[index].socketid == socket.id) {
-               userArrays[index1].members[index].readyStatus = true
-               server.sockets.in(data.roomname).emit('getUsers', { userlist: userArrays[index1].members }); //dont fire get users in existing group
-               return
+               if (room.members[index].socketid == socket.id) {
+                  userArrays[index1].members[index].readyStatus = true
+                  server.sockets.in(data.roomname).emit('getUsers', { userlist: userArrays[index1].members }); //dont fire get users in existing group
+                  return
+               }
+
             }
-            
-          }
 
          }
-         
+
 
       }
 
@@ -148,18 +157,18 @@ server.on('connection', function (socket) {
 
          if (room.RoomName == data.roomname) {
 
-          for (let index = 0; index < room.members.length; index++) {
+            for (let index = 0; index < room.members.length; index++) {
 
-            if (room.members[index].socketid == socket.id) {
-               userArrays[index1].members[index].readyStatus = true
-               server.sockets.in(data.roomname).emit('getLoadedUsers', { userlist: userArrays[index1].members }); //dont fire get users in existing group
-               return
+               if (room.members[index].socketid == socket.id) {
+                  userArrays[index1].members[index].readyStatus = true
+                  server.sockets.in(data.roomname).emit('getLoadedUsers', { userlist: userArrays[index1].members }); //dont fire get users in existing group
+                  return
+               }
+
             }
-            
-          }
 
          }
-         
+
 
       }
 
@@ -172,17 +181,17 @@ server.on('connection', function (socket) {
 
          if (room.RoomName == data.roomname) {
 
-          for (let index = 0; index < room.members.length; index++) {
+            for (let index = 0; index < room.members.length; index++) {
 
-            room.members[index].roomFullStatus = true
+               room.members[index].roomFullStatus = true
 
             }
-         
+
             server.sockets.in(data.roomname).emit('getUsers', { userlist: userArrays[index1].members });
-            
-          }
 
          }
+
+      }
 
    });
 
@@ -193,17 +202,17 @@ server.on('connection', function (socket) {
 
          if (room.RoomName == data.roomname) {
 
-          for (let index = 0; index < room.members.length; index++) {
+            for (let index = 0; index < room.members.length; index++) {
 
-            room.members[index].roomFullStatus = true
+               room.members[index].roomFullStatus = true
 
             }
-         
+
             server.sockets.in(data.roomname).emit('getLoadedUsers', { userlist: userArrays[index1].members });
-            
-          }
 
          }
+
+      }
 
    });
 
@@ -214,21 +223,21 @@ server.on('connection', function (socket) {
 
          if (room.RoomName == data.roomid) {
 
-          for (let index = 0; index < room.members.length; index++) {
+            for (let index = 0; index < room.members.length; index++) {
 
-            if (data.publicKey == room.members[index].publicKey) {
-               room.members[index].joinstatus = true
-               room.members[index].socketid = socket.id
-               return
+               if (data.publicKey == room.members[index].publicKey) {
+                  room.members[index].joinstatus = true
+                  room.members[index].socketid = socket.id
+                  return
+               }
+
             }
 
-            }
-         
             server.to(socket.id).emit('wrongKeyEvent', true);
-            
-          }
 
          }
+
+      }
 
    });
 
@@ -239,19 +248,19 @@ server.on('connection', function (socket) {
 
          if (room.RoomName == data.roomid) {
 
-          for (let index = 0; index < room.members.length; index++) {
+            for (let index = 0; index < room.members.length; index++) {
 
-            if (room.members[index].roomFullStatus == true) {
-               server.to(socket.id).emit('roomFullEvent', true);
-               return
+               if (room.members[index].roomFullStatus == true) {
+                  server.to(socket.id).emit('roomFullEvent', true);
+                  return
+               }
+
             }
-            
-            }
-            server.to(socket.id).emit('roomFullEvent', false);     
-            
-          }
+            server.to(socket.id).emit('roomFullEvent', false);
 
          }
+
+      }
 
    });
 
@@ -276,11 +285,11 @@ server.on('connection', function (socket) {
 
                if (userArrays[index1].existingroom == true) {
                   server.sockets.in(userArrays[index1].RoomName).emit('getLoadedUsers', { userlist: userArrays[index1].members });
-               }else{
+               } else {
                   server.sockets.in(userArrays[index1].RoomName).emit('getUsers', { userlist: userArrays[index1].members });
                }
 
-               
+
 
             }
 
@@ -293,6 +302,6 @@ server.on('connection', function (socket) {
 
    socket.on('msg', function (data) {
       //Send message to everyone
-      server.sockets.in(data.roomid).emit('newmsg',{msg: data.message, publicKey: data.publicKey, signature: data.signature, leaderstatus:data.leaderstatus, arrayPosition: data.arrayPosition});
+      server.sockets.in(data.roomid).emit('newmsg', { msg: data.message, publicKey: data.publicKey, signature: data.signature, leaderstatus: data.leaderstatus, arrayPosition: data.arrayPosition });
    })
 });

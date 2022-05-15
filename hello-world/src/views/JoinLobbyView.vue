@@ -18,6 +18,7 @@ export default {
   name: "JoinLobbyView",
   data() {
     return {
+      socket: Object
     };
   },
   components: {
@@ -28,9 +29,15 @@ export default {
 
   },
   async mounted() {
-      var SocketInstance = await io('http://localhost:8000');
-      console.log(SocketInstance)
-
+      //try connecting to the server 
+      try {
+        this.socket = await io('http://localhost:8000');
+      } catch (error) {
+        console.log(error);
+      }
+      
   },
+
+  
 };
 </script>
