@@ -34,12 +34,29 @@ server.on('connection', function (socket) {
 
    });
 
-   socket.on('searchMusic', function (searchString) {
+   socket.on('searchMusic', async function (searchString) {
       console.log("Searching for " + searchString);
+      packagedResponse = []
 
-      var response = axios.get("https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" + searchString + "&limit=5&l=en-US");
+      var response = await axios.get("https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" + searchString + "&limit=5&l=en-US");
 
-      socket.emit('searchResults', response)
+      for (let index = 0; index < response.data.songs.data.length; index++) {
+         const element = response.data.songs.data[index].attributes;
+         
+         albumArtTransform = element.artwork.url
+         albumArtTransform = albumArtTransform.replace("{w}", "230").replace("{h}", "230")
+
+         songObject = {
+            artistName: element.artistName,
+            songName: element.name,
+            songPreviewUrl: element.previews[0].url,
+            albumArt : albumArtTransform,
+         }
+         
+         packagedResponse.push(songObject)
+      }
+
+      socket.emit('searchResults', packagedResponse)
    });
 
    socket.on('setUsernameExisting', function (data) {
