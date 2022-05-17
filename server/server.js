@@ -38,7 +38,7 @@ server.on('connection', function (socket) {
       console.log("Searching for " + searchString);
       packagedResponse = []
 
-      var response = await axios.get("https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" + searchString + "&limit=5&l=en-US");
+      var response = await axios.get("https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" + searchString + "&limit=6&l=en-US");
 
       for (let index = 0; index < response.data.songs.data.length; index++) {
          const element = response.data.songs.data[index].attributes;
@@ -47,6 +47,7 @@ server.on('connection', function (socket) {
          albumArtTransform = albumArtTransform.replace("{w}", "230").replace("{h}", "230")
 
          songObject = {
+            id: index,
             artistName: element.artistName,
             songName: element.name,
             songPreviewUrl: element.previews[0].url,
