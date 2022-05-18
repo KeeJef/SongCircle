@@ -11,9 +11,16 @@
 <script>
 import lobbySettings from "../components/lobbySettings.vue";
 import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
+import io from "socket.io-client";
+import { useSocket } from "@/store/index";
+
 
 export default {
   name: "LobbyView",
+  setup() {
+    const socketObject = useSocket();
+    return { socketObject };
+  },
   data() {
     return {
     };
@@ -26,7 +33,18 @@ export default {
 
   },
   async mounted() {
+    
+    try {
+        this.socketObject = await io('http://localhost:8000');
+      } catch (error) {
+        console.log(error);
+      }
 
+    // this.socketObject.emit("createRoom");
+
+    // this.socketObject.on("returnedRoom", (data) => {
+
+    // });
 
   },
 };

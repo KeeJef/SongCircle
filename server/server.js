@@ -38,8 +38,13 @@ server.on('connection', function (socket) {
       console.log("Searching for " + searchString);
       packagedResponse = []
 
-      var response = await axios.get("https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" + searchString + "&limit=6&l=en-US");
-
+      try {
+         var response = await axios.get("https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" + searchString + "&limit=6&l=en-US");
+      } catch (error) {
+         console.log(error);
+         return
+      }
+      
       for (let index = 0; index < response.data.songs.data.length; index++) {
          const element = response.data.songs.data[index].attributes;
          
@@ -92,6 +97,7 @@ server.on('connection', function (socket) {
 
    });
 
+   //move logic for creation of random room to serverside
 
    socket.on('create', function (room) {
       console.log("a new room was created with the name " + room)

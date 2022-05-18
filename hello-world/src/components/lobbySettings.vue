@@ -7,7 +7,7 @@
     <div class="text-left"><b>Music Selection time</b></div>
     <selectSettings :options="['30 Seconds', '60 Seconds', '120 Seconds']" :isAdmin="this.isAdmin"></selectSettings>
     <div class="text-left"><b>Theme</b></div>
-    <selectSettings :options="['None','Rock Anthems','Pop Anthems','Rap Music','Electronic Music','Classical Music','Indie Music','Country Music','Musicals','ideo Game Music','70s Music','80s Music','90s Music','00s Music','10s Music']" :isAdmin="this.isAdmin"></selectSettings>
+    <selectSettings :options="['None','Rock Anthems','Pop Anthems','Rap Music','Electronic Music','Classical Music','Indie Music','Country Music','Musicals','Video Game Music','70s Music','80s Music','90s Music','00s Music','10s Music']" :isAdmin="this.isAdmin"></selectSettings>
     <div>
       <button
         @click="$router.push('lobby')"
