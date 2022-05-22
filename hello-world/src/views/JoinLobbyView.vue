@@ -35,6 +35,8 @@ export default {
       } catch (error) {
         console.log(error);
       }
+
+      //read the roomID from the url
       
   },
 

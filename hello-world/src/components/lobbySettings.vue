@@ -68,6 +68,8 @@ export default {
   props: {
     isAdmin: { type: Boolean },
   },
+
+  //refactor to use Store actions
   methods: {
     startGame() {
       const socketStore = useSocket()

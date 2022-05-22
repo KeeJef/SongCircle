@@ -6,6 +6,8 @@
     class="p-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
     <lobbySettings :isAdmin="true"></lobbySettings>
     <avatarLobbyDisplay></avatarLobbyDisplay>
+    <!-- display properly -->
+    songcircle.fun/join?{{this.roomInfo.roomID}}
   </div>
 </template>
 
@@ -25,7 +27,9 @@ export default {
     return { socketStore, roomInfo, playerInfo};
   },
   data() {
-    return {};
+    return {
+
+    };
   },
   components: {
     lobbySettings,
@@ -45,6 +49,8 @@ export default {
     },
 
   },
+
+// refactor Store to use actions
 
   async mounted() {
     try {
