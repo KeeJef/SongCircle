@@ -40,7 +40,7 @@ export default {
         console.log(error);
       }
 
-    // this.socketObject.emit("createRoom");
+    this.socketObject.emit("createRoom");
 
     // this.socketObject.on("returnedRoom", (data) => {
 

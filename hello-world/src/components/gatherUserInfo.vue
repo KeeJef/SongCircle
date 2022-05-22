@@ -3,7 +3,8 @@
     class="container max-w-[490px] bg-white rounded flex-col justify-center mx-auto px-2 py-2 m-1">
     <div class="">
       <input
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+        :class="{'border border-rose-500':failedNameCheck}"
         id="username"
         type="text"
         placeholder="Enter your name"
@@ -29,7 +30,7 @@
 
     <div>
       <button
-        @click="$router.push('lobby')"
+        @click="validateName"
         type="button"
         class="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
         Create New Room
@@ -100,6 +101,7 @@ export default {
   },
   data() {
     return {
+      failedNameCheck: false,
       emojiArrayPosition: 0,
       shuffledEmojiList: [],
     };
@@ -119,6 +121,13 @@ export default {
         this.emojiArrayPosition--;
         this.playerInfo.playerEmoji =
           this.shuffledEmojiList[this.emojiArrayPosition];
+      }
+    },
+    validateName() {
+      if (this.playerInfo.playerName) {
+        this.$router.push("lobby");
+      }else{
+        this.failedNameCheck = true;
       }
     },
     shuffleArray(array) {
