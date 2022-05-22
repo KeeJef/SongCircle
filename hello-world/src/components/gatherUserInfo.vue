@@ -3,8 +3,8 @@
     class="container max-w-[490px] bg-white rounded flex-col justify-center mx-auto px-2 py-2 m-1">
     <div class="">
       <input
-        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-        :class="{'border border-rose-500':failedNameCheck}"
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        :class="{ 'border border-rose-500': failedNameCheck }"
         id="username"
         type="text"
         placeholder="Enter your name"
@@ -112,12 +112,14 @@ export default {
   methods: {
     //function for picking random emoji
     pickEmoji(direction) {
-
-      if (direction && this.emojiArrayPosition < this.shuffledEmojiList.length) {
+      if (
+        direction &&
+        this.emojiArrayPosition < this.shuffledEmojiList.length
+      ) {
         this.emojiArrayPosition++;
         this.playerInfo.playerEmoji =
           this.shuffledEmojiList[this.emojiArrayPosition];
-      } else if (direction == false & this.emojiArrayPosition > 0) {
+      } else if ((direction == false) & (this.emojiArrayPosition > 0)) {
         this.emojiArrayPosition--;
         this.playerInfo.playerEmoji =
           this.shuffledEmojiList[this.emojiArrayPosition];
@@ -126,7 +128,7 @@ export default {
     validateName() {
       if (this.playerInfo.playerName) {
         this.$router.push("lobby");
-      }else{
+      } else {
         this.failedNameCheck = true;
       }
     },
@@ -144,6 +146,13 @@ export default {
     this.shuffledEmojiList = await this.shuffleArray(emojiList);
     this.playerInfo.playerEmoji =
       this.shuffledEmojiList[this.emojiArrayPosition];
+    this.playerInfo.playerID = Math.floor(Math.random() * 1000000);
+
+    window.addEventListener("keypress", (e) => {
+      if (e.keyCode === 13) {
+        this.validateName();
+      }
+    });
   },
 };
 </script>

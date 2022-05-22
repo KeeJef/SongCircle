@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const usePlayerInfo = defineStore({
   id: "playerInfo",
   state: () => {
-    return { playerEmoji: "", playerName: "", playerModStatus: "true",};
+    return { playerEmoji: "", playerName: "", playerID:"", playerModStatus: "true",};
   },
   getters: {},
   actions: {},
@@ -12,16 +12,16 @@ export const usePlayerInfo = defineStore({
 export const useRoomInfo = defineStore({
   id: "roomInfo",
   state: () => {
-    return {roomname: "", roomMembers: []};
+    return {roomID: "", roomSettings:{rounds:"",time:"",theme:""}, members: []};
   },
   getters: {},
   actions: {},
 });
 
 export const useSocket = defineStore({
-  id: "socket",
+  id: "socketObject",
   state: () => {
-    return {socketObject: Object};
+    return {socketObject: null};
   },
   getters: {},
   actions: {},

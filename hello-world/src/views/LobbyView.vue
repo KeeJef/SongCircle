@@ -1,10 +1,11 @@
 <template>
-    <div id="logo" class="px-2 container flex justify-center mx-auto pb-5">
-      <a href="."><img src="../assets/songcircle.png" alt="SongCircle Logo"/></a>
-    </div>
-  <div class="p-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
-      <lobbySettings :isAdmin="true"></lobbySettings>
-      <avatarLobbyDisplay></avatarLobbyDisplay>
+  <div id="logo" class="px-2 container flex justify-center mx-auto pb-5">
+    <a href="."><img src="../assets/songcircle.png" alt="SongCircle Logo" /></a>
+  </div>
+  <div
+    class="p-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
+    <lobbySettings :isAdmin="true"></lobbySettings>
+    <avatarLobbyDisplay></avatarLobbyDisplay>
   </div>
 </template>
 
@@ -12,40 +13,61 @@
 import lobbySettings from "../components/lobbySettings.vue";
 import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
 import io from "socket.io-client";
-import { useSocket } from "@/store/index";
-
+import { useRoomInfo, useSocket, usePlayerInfo } from "@/store/index";
 
 export default {
   name: "LobbyView",
   setup() {
-    const socketObject = useSocket();
-    return { socketObject };
+    const socketStore = useSocket();
+    const roomInfo = useRoomInfo();
+    const playerInfo = usePlayerInfo();
+
+    return { socketStore, roomInfo, playerInfo};
   },
   data() {
-    return {
-    };
+    return {};
   },
   components: {
     lobbySettings,
     avatarLobbyDisplay,
   },
   methods: {
+    async joinRoom() {
+      try {
+        this.socketStore.socketObject.emit(
+          "joinRoom",
+          this.playerInfo.$state,
+          this.roomInfo.roomID
+        );
+      } catch (error) {
+        console.log("Failed to join room" + error);
+      }
+    },
 
   },
+
   async mounted() {
-    
     try {
-        this.socketObject = await io('http://localhost:8000');
-      } catch (error) {
-        console.log(error);
-      }
+      this.socketStore.socketObject = await io("http://localhost:8000");
+    } catch (error) {
+      console.log("Failed to connect to SongCircle server" + error);
+    }
 
-    this.socketObject.emit("createRoom");
+    try {
+      this.socketStore.socketObject.emit("createNewRoom");
+    } catch (error) {
+      console.log("Failed to create room" + error);
+    }
 
-    // this.socketObject.on("returnedRoom", (data) => {
+    this.socketStore.socketObject.on("returnRoomID", (data) => {
+      this.roomInfo.roomID = data.roomID;
+      this.roomInfo.members = data.members;
+      this.joinRoom();
+    });
 
-    // });
-
+    this.socketStore.socketObject.on("returnMembers", (data) => {
+      this.roomInfo.members = data;
+    });
   },
 };
 </script>
