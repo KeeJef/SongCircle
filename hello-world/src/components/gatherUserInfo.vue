@@ -33,7 +33,7 @@
         @click="validateName"
         type="button"
         class="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-        Create New Room
+        {{this.buttonName}}
       </button>
     </div>
   </div>
@@ -109,6 +109,11 @@ export default {
   components: {
     basicAccordion,
   },
+  props: {
+    buttonName: String,
+    nextRoute: String,
+    modStatus: Boolean,
+  },
   methods: {
     //function for picking random emoji
     pickEmoji(direction) {
@@ -127,7 +132,7 @@ export default {
     },
     validateName() {
       if (this.playerInfo.playerName) {
-        this.$router.push("lobby");
+        this.$router.push(this.nextRoute);
       } else {
         this.failedNameCheck = true;
       }
@@ -144,6 +149,7 @@ export default {
   },
   async mounted() {
     this.shuffledEmojiList = await this.shuffleArray(emojiList);
+    this.playerInfo.playerModStatus = this.modStatus;
     this.playerInfo.playerEmoji =
       this.shuffledEmojiList[this.emojiArrayPosition];
     this.playerInfo.playerID = Math.floor(Math.random() * 1000000);

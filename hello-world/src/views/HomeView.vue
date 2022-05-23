@@ -3,7 +3,7 @@
     <div id="logo" class="container flex justify-center mx-auto pb-5">
       <a href="."><img src="../assets/songcircle.png" alt="SongCircle Logo"/></a>
     </div>
-    <gatherUserInfo></gatherUserInfo>
+    <gatherUserInfo buttonName="Create New Room" nextRoute="lobby" :modStatus="true"></gatherUserInfo>
   </div>
 </template>
 
