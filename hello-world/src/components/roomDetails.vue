@@ -44,9 +44,9 @@ export default {
     return {
       fadeIn: false,
       qrSize: 280,
-      baseURL: "localhost:8080/join?",
+      baseURL: "localhost:8080/#/join?",
       // baseURLLink: "https://" + baseURL,
-      baseURLLink: "localhost:8080/join?",
+      baseURLLink: "localhost:8080/#/join?",
     };
   },
   components: {

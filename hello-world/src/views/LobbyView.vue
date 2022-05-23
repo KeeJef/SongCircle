@@ -3,19 +3,20 @@
     <a href="."><img src="../assets/songcircle.png" alt="SongCircle Logo" /></a>
   </div>
   <div
-    class="p-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
+    class="px-2 py-1 flex flex-col sm:flex-row sm:flex items-center justify-center">
     <lobbySettings :isAdmin="true"></lobbySettings>
     <avatarLobbyDisplay></avatarLobbyDisplay>
   </div>
+    <!-- Move room details, left align -->
   <div class="px-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
-    <qrCodeDisplay :roomID=this.roomInfo.roomID></qrCodeDisplay>
+    <roomDetails :roomID=this.roomInfo.roomID></roomDetails>
   </div>
 </template>
 
 <script>
 import lobbySettings from "../components/lobbySettings.vue";
 import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
-import qrCodeDisplay from "../components/roomDetails.vue";
+import roomDetails from "../components/roomDetails.vue";
 import io from "socket.io-client";
 import { useRoomInfo, useSocket, usePlayerInfo } from "@/store/index";
 
@@ -36,7 +37,7 @@ export default {
   components: {
     lobbySettings,
     avatarLobbyDisplay,
-    qrCodeDisplay
+    roomDetails
   },
   methods: {
     async joinRoom() {

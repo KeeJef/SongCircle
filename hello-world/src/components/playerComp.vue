@@ -1,6 +1,11 @@
 <template>
   <div class="w-fit pl-4">
-    <div class="w-fit -translate-x-5 translate-y-5 -rotate-45 text-5xl select-none">👑</div>
+    <div
+      v-if="compPlayerInfo.playerModStatus"
+      class="w-fit -translate-x-5 translate-y-5 -rotate-45 text-5xl select-none">
+      👑
+    </div>
+    <!-- Fix this throwing off non admin positioning -->
     <div class="w-fit text-8xl pb-2 select-none">
       {{ compPlayerInfo.playerEmoji }}
     </div>
