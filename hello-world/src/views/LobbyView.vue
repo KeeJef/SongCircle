@@ -6,14 +6,16 @@
     class="p-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
     <lobbySettings :isAdmin="true"></lobbySettings>
     <avatarLobbyDisplay></avatarLobbyDisplay>
-    <!-- display properly -->
-    songcircle.fun/join?{{this.roomInfo.roomID}}
+  </div>
+  <div class="px-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
+    <qrCodeDisplay :roomID=this.roomInfo.roomID></qrCodeDisplay>
   </div>
 </template>
 
 <script>
 import lobbySettings from "../components/lobbySettings.vue";
 import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
+import qrCodeDisplay from "../components/roomDetails.vue";
 import io from "socket.io-client";
 import { useRoomInfo, useSocket, usePlayerInfo } from "@/store/index";
 
@@ -34,6 +36,7 @@ export default {
   components: {
     lobbySettings,
     avatarLobbyDisplay,
+    qrCodeDisplay
   },
   methods: {
     async joinRoom() {

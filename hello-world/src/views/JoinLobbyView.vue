@@ -18,7 +18,8 @@ export default {
   name: "JoinLobbyView",
   data() {
     return {
-      socket: Object
+      socket: Object,
+      roomID: String
     };
   },
   components: {
@@ -35,8 +36,13 @@ export default {
       } catch (error) {
         console.log(error);
       }
-
-      //read the roomID from the url
+      
+      try {
+        this.roomID = this.$route.query.page
+      } catch (error) {
+        console.log(error)
+      }
+      
       
   },
 
