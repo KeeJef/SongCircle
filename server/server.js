@@ -118,7 +118,6 @@ server.on("connection", function (socket) {
   socket.on("createNewRoom", function () {
     roomID = Math.random().toString(36).substr(2, 7);
     console.log("a new room was created with the name " + roomID);
-    socket.join(roomID);
 
     var roomObject = { roomID: roomID, roomSettings:{rounds:"",time:"",theme:""}, members: [] };
     roomsArray.push(roomObject);
@@ -133,12 +132,15 @@ server.on("connection", function (socket) {
 
    socket.on("joinRoom", function (playerInfo,roomID) {
       try {
+        socket.join(roomID);
          for (let index = 0; index < roomsArray.length; index++) {
             const element = roomsArray[index];
    
             if (element.roomID == roomID) {
+               playerInfo.playerSocketID = socket.id;
                element.members.push(playerInfo)
-               socket.emit("returnMembers", element.members)
+               //socket.emit("returnMembers", element.members)
+              server.sockets.in(roomID).emit("returnMembers", element.members);
             }
             
          }
@@ -298,37 +300,30 @@ server.on("connection", function (socket) {
   });
 
   socket.on("disconnect", function () {
-    for (let index1 = 0; index1 < roomsArray.length; index1++) {
-      const membersArray = roomsArray[index1].members;
+    for (let i = 0; i < roomsArray.length; i++) {
+      const room = roomsArray[i];
 
-      for (let index2 = 0; index2 < membersArray.length; index2++) {
-        const element = membersArray[index2];
+      for (let j = 0; j < room.members.length; j++) {
+        const member = room.members[j];
+        
+        if (member.playerSocketID == socket.id) {
+          room.members.splice(j, 1);
+          server.sockets.in(roomID).emit("returnMembers", room.members);
 
-        if (element.socketid == socket.id) {
-          console.log(
-            "Removed User " + roomsArray[index1].members[index2].name
-          );
-          roomsArray[index1].members.splice(index2, 1);
-
-          if (roomsArray[index1].members.length == 0) {
-            console.log("Removed Empty Room " + roomsArray[index1].RoomName);
-            roomsArray.splice(index1, 1);
-            return;
+          if (room.members.length == 0) {
+            roomsArray.splice(i, 1);
+            console.log("Room Deleted");
           }
 
-          if (roomsArray[index1].existingroom == true) {
-            server.sockets
-              .in(roomsArray[index1].RoomName)
-              .emit("getLoadedUsers", { userlist: roomsArray[index1].members });
-          } else {
-            server.sockets
-              .in(roomsArray[index1].RoomName)
-              .emit("getUsers", { userlist: roomsArray[index1].members });
-          }
+          return
+        }
+          
         }
       }
+
+      
     }
-  });
+  );
 
   socket.on("msg", function (data) {
     //Send message to everyone

@@ -44,6 +44,11 @@ export default {
 
     try {
       this.socketStore.socketObject = await io("http://localhost:8000");
+
+      this.socketStore.socketObject.on("connect", () => {
+        this.playerInfo.playerSocketID = this.socketStore.socketObject.id
+      });
+      
     } catch (error) {
       console.log("Failed to connect to SongCircle server" + error);
     }

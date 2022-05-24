@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const usePlayerInfo = defineStore({
   id: "playerInfo",
   state: () => {
-    return { playerEmoji: "", playerName: "", playerID:"", playerModStatus: Boolean,};
+    return { playerEmoji: "", playerName: "", playerSocketID:null, playerModStatus: Boolean,};
   },
   getters: {},
   actions: {},
