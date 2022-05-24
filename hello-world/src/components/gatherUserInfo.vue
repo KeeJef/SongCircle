@@ -151,8 +151,7 @@ export default {
     this.shuffledEmojiList = await this.shuffleArray(emojiList);
     this.playerInfo.playerModStatus = this.modStatus;
     this.playerInfo.playerEmoji =
-      this.shuffledEmojiList[this.emojiArrayPosition];
-    this.playerInfo.playerID = Math.floor(Math.random() * 1000000);
+    this.shuffledEmojiList[this.emojiArrayPosition];
 
     window.addEventListener("keypress", (e) => {
       if (e.keyCode === 13) {

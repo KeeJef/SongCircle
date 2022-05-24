@@ -7,9 +7,10 @@
     <lobbySettings :isAdmin="true"></lobbySettings>
     <avatarLobbyDisplay></avatarLobbyDisplay>
   </div>
-    <!-- Move room details, left align -->
-  <div class="px-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
-    <roomDetails :roomID=this.roomInfo.roomID></roomDetails>
+  <!-- Move room details, left align -->
+  <div
+    class="px-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
+    <roomDetails :roomID="this.roomInfo.roomID"></roomDetails>
   </div>
 </template>
 
@@ -27,17 +28,15 @@ export default {
     const roomInfo = useRoomInfo();
     const playerInfo = usePlayerInfo();
 
-    return { socketStore, roomInfo, playerInfo};
+    return { socketStore, roomInfo, playerInfo };
   },
   data() {
-    return {
-
-    };
+    return {};
   },
   components: {
     lobbySettings,
     avatarLobbyDisplay,
-    roomDetails
+    roomDetails,
   },
   methods: {
     async joinRoom() {
@@ -51,14 +50,18 @@ export default {
         console.log("Failed to join room" + error);
       }
     },
-
   },
 
-// refactor Store to use actions
+  // refactor Store to use actions
 
   async mounted() {
     try {
       this.socketStore.socketObject = await io("http://localhost:8000");
+
+      this.socketStore.socketObject.on("connect", () => {
+        this.playerInfo.playerSocketID = this.socketStore.socketObject.id
+      });
+
     } catch (error) {
       console.log("Failed to connect to SongCircle server" + error);
     }
