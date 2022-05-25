@@ -12,6 +12,7 @@
 <script>
 import SearchComp from "../components/searchComp.vue";
 import io from "socket.io-client";
+import {url, socketsServerPort} from "@/store/index";
 
 export default {
   name: "SearchView",
@@ -29,9 +30,9 @@ export default {
     },
   },
   async mounted() {
-
+//fix this by passing active socket, do not create new socket
      try {
-      this.socket = await io("http://localhost:8000");
+      this.socket = await io(url+":"+socketsServerPort);
     } catch (error) {
       console.log(error);
     }

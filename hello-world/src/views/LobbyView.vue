@@ -19,7 +19,7 @@ import lobbySettings from "../components/lobbySettings.vue";
 import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
 import roomDetails from "../components/roomDetails.vue";
 import io from "socket.io-client";
-import { useRoomInfo, useSocket, usePlayerInfo } from "@/store/index";
+import { useRoomInfo, useSocket, usePlayerInfo, url, socketsServerPort} from "@/store/index";
 
 export default {
   name: "LobbyView",
@@ -56,7 +56,7 @@ export default {
 
   async mounted() {
     try {
-      this.socketStore.socketObject = await io("http://localhost:8000");
+      this.socketStore.socketObject = await io(url+":"+socketsServerPort);
 
       this.socketStore.socketObject.on("connect", () => {
         this.playerInfo.playerSocketID = this.socketStore.socketObject.id

@@ -4,7 +4,7 @@
     <div class="flex-col">
       <div class="bg-slate-100 rounded w-fit p-2 m-auto">
         <div class="sm:text-2xl text-lg flex justify-center">
-          <div class="select-all">{{ baseURLLink }}{{roomID}}</div>
+          <div class="select-all">{{ baseURL }}{{roomID}}</div>
           <span class="pl-2"
             ><svg
               class="h-8 w-8 text-slate-400 hover:bg-slate-200 rounded"
@@ -37,6 +37,7 @@
 
 <script>
 import qrCodeVue from "qrcode.vue";
+import { url, webServerPort } from "@/store/index";
 
 export default {
   name: "QR Code Display",
@@ -44,9 +45,7 @@ export default {
     return {
       fadeIn: false,
       qrSize: 280,
-      baseURL: "localhost:8080/#/join?",
-      // baseURLLink: "https://" + baseURL,
-      baseURLLink: "localhost:8080/#/join?",
+      baseURL: url+':'+webServerPort+"/#/join?",
     };
   },
   components: {
