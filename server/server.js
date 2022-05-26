@@ -159,9 +159,12 @@ server.on("connection", function (socket) {
       try {
          for (let index = 0; index < roomsArray.length; index++) {
             const element = roomsArray[index];
+            console.log(socket.id)
    
             if (element.roomID = roomInfo.roomID) {
                element.roomSettings = roomInfo.roomSettings;
+               server.sockets.in(roomInfo.roomID).emit("newSettings", element.roomSettings);
+               console.log("Updated Room Settings")
             }
             
          }
@@ -169,7 +172,6 @@ server.on("connection", function (socket) {
       } catch (error) {
          console.log("Failure to update room " + error)
       }
-      console.log("Updated Room Settings")
    });
 
 
