@@ -37,7 +37,7 @@
 
 <script>
 import qrCodeVue from "qrcode.vue";
-import { url, webServerPort } from "@/store/index";
+import {} from "@/store/index";
 
 export default {
   name: "QR Code Display",
@@ -45,7 +45,7 @@ export default {
     return {
       fadeIn: false,
       qrSize: 280,
-      baseURL: url+':'+webServerPort+"/#/join?",
+      baseURL: "http://localhost:8080/#/join?",
     };
   },
   components: {

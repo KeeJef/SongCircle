@@ -1,10 +1,12 @@
 const axios = require("axios").default;
-const io = require("socket.io")({
+const io = require("socket.io")(
+  {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
   },
-});
+}
+);
 
 server = io.listen(8000);
 console.log("Running on port " + 8000);

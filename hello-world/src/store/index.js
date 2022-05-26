@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
 
 //export const url = "https://songcircle.xyz";
-export const url = "http://localhost";
-export const socketsServerPort = 8000;
-export const webServerPort = 8080;
+export const url = "http://localhost:8000";
 
 export const usePlayerInfo = defineStore({
   id: "playerInfo",

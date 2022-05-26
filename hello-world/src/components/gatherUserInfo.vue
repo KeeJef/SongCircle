@@ -4,10 +4,9 @@
     <div class="">
       <input
         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        :class="{ 'border border-rose-500': failedNameCheck }"
+        :placeholder=this.placeHolderInfo :class="{ 'border border-rose-500': failedNameCheck }"
         id="username"
         type="text"
-        placeholder="Enter your name"
         autocomplete="off"
         v-model="playerInfo.playerName" />
     </div>
@@ -104,6 +103,7 @@ export default {
       failedNameCheck: false,
       emojiArrayPosition: 0,
       shuffledEmojiList: [],
+      placeHolderInfo: "Enter your name"
     };
   },
   components: {
@@ -132,7 +132,15 @@ export default {
     },
     validateName() {
       if (this.playerInfo.playerName) {
-        this.$router.push(this.nextRoute);
+        if (this.playerInfo.playerName.length <10) {
+          this.$router.push(this.nextRoute);
+        }
+        else{
+          this.playerInfo.playerName = ""
+          this.placeHolderInfo = "Name must be less than 10 characters";
+          this.failedNameCheck = true;
+        }
+        
       } else {
         this.failedNameCheck = true;
       }
