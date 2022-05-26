@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "SelectSettings",
+
   data() {
     return {
       selectedOption: ""

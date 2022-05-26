@@ -66,6 +66,10 @@ export default {
     this.socketStore.socketObject.on("returnMembers", (data) => {
       this.roomInfo.members = data;
     });
+
+    this.socketStore.socketObject.on("newSettings", (data) => {
+      this.roomInfo.roomSettings = data;
+    });
   },
 };
 </script>
