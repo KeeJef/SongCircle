@@ -74,6 +74,8 @@ export default {
     SearchPlaceholder
   },
   async mounted() {
+    //remove this in favor of global socket
+
     try {
       this.socket = await io("http://localhost:8000");
     } catch (error) {

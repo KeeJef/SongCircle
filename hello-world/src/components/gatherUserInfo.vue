@@ -12,19 +12,19 @@
     </div>
 
     <div class="flex justify-center py-10">
-      <div
+      <button
         class="text-5xl cursor-pointer select-none pr-10"
         @click="pickEmoji(false)">
         &lt;
-      </div>
-      <div class="text-8xl min-w-[30%] select-none">
+      </button>
+      <div class="text-8xl min-w-[45%] select-none">
         {{ playerInfo.playerEmoji }}
       </div>
-      <div
+      <button
         @click="pickEmoji(true)"
         class="text-5xl cursor-pointer select-none pl-10">
         &gt;
-      </div>
+      </button>
     </div>
 
     <div>

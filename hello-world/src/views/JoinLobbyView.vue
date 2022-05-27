@@ -70,6 +70,11 @@ export default {
     this.socketStore.socketObject.on("newSettings", (data) => {
       this.roomInfo.roomSettings = data;
     });
+
+    this.socketStore.socketObject.on("startGameEvent", () => {
+      console.log("Game has started");
+      this.$router.push('search')
+    });
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container max-w-[490px] bg-white rounded flex-col justify-center sm:place-self-start px-2 py-2 m-1">
+    class="container max-w-[490px] min-h-[342px] bg-white rounded flex-col justify-center sm:place-self-start px-2 py-2 m-1">
     <div class="text-4xl pb-3">Settings</div>
     <div class="text-left"><b>Rounds</b></div>
 
@@ -67,7 +67,7 @@
     </select>
 
     <div>
-      <button
+      <button v-if="isAdmin"
         @click="startGame"
         type="button"
         class="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
@@ -101,7 +101,13 @@ export default {
   //refactor to use Store actions
   methods: {
     startGame() {
-      //route to new screen and fire off game start event
+      try {
+        this.socketStore.socketObject.emit("startGame", this.roomInfo);
+      } catch (error) {
+        console.log(error)
+        return
+      }
+      this.$router.push('search')
     },
     updateSelection(){
       try {
