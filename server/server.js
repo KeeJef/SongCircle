@@ -122,6 +122,13 @@ server.on("connection", function (socket) {
     
   });
 
+  socket.on("songChosen", function (roomInfo) {
+
+// store song in db, check if everyone has a song selected if yes then randomise and return the song array
+
+  });
+
+
   socket.on("disconnect", function () {
     for (let i = 0; i < roomsArray.length; i++) {
       const room = roomsArray[i];
