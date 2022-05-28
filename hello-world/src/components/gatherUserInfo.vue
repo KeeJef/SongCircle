@@ -13,7 +13,7 @@
 
     <div class="flex justify-center py-10">
       <button
-        class="text-5xl cursor-pointer select-none pr-10"
+        class="text-5xl cursor-pointer select-none pr-10 touch-manipulation rounded"
         @click="pickEmoji(false)">
         &lt;
       </button>
@@ -22,7 +22,7 @@
       </div>
       <button
         @click="pickEmoji(true)"
-        class="text-5xl cursor-pointer select-none pl-10">
+        class="text-5xl cursor-pointer select-none pl-10 touch-manipulation rounded">
         &gt;
       </button>
     </div>
@@ -41,26 +41,23 @@
     class="container max-w-[490px] bg-white rounded text-left flex-col justify-center mx-auto px-2 py-2">
     <basicAccordion :isOpenInit="true" class="">
       <template v-slot:title>
-        <span class="text-2xl mt-0 mb-2 font-bold hover:underline">News</span>
+        <span class="text-2xl mt-0 mb-2 font-bold hover:underline">How to Play</span>
       </template>
       <template v-slot:content>
         <div
           class="container bg-green-200 rounded flex-col text-left mx-auto px-2 py-2 m-1">
-          <div class="pb-3">Hello</div>
-          We added:
-          <ul class="list-disc list-inside pl-3 pb-3">
+          <div class="pb-2">Hello</div>
+          <ol class="list-decimal list-inside pl-3 pb-3">
             <li>
-              <b>New Languages:</b> Italian, Estonian, Korean, Hungarian and
-              Tagalog.
+              <b>Invite Friends:</b> Invite all your friends to a lobby using the QR code or link
             </li>
             <li>
-              More player support with up to <b>12</b> players in private rooms!
+            <b>Choose a Theme</b> Choose a theme that you and your friends agree on
             </li>
-            <li><b>Custom words</b> in private rooms.</li>
-            <li><b>Custom drawing</b> time in private rooms</li>
-          </ul>
-          Please check out the new languages and report any spelling issues if
-          you like!
+            <li><b>Choose Songs</b> Everyone adds a song. matching the theme to the shared playlist</li>
+            <li><b>Guess!</b> Guess which player added which song to earn points</li>
+          </ol>
+          Please check out my code on <a class="underline" href="https://github.com/KeeJef/SongCircle">Github</a> and report any bugs 
         </div>
       </template>
     </basicAccordion>
@@ -70,18 +67,27 @@
         <span class="text-2xl mt-0 mb-2 font-bold hover:underline">About</span>
       </template>
       <template v-slot:content>
-        <div>About info</div>
+        <div>This project was created by <a class="underline" href="https://twitter.com/JefferysKee">Kee Jefferys</a> please contribute and suggestions or feedback
+        to <a class="underline" href="https://github.com/KeeJef/SongCircle">Github</a></div>
       </template>
     </basicAccordion>
 
     <basicAccordion :isOpenInit="false" class="">
       <template v-slot:title>
         <span class="text-2xl mt-0 mb-2 font-bold hover:underline"
-          >How to play</span
+          >News</span
         >
       </template>
       <template v-slot:content>
-        <div>How to play info</div>
+        <div>
+          <ul class="list-disc list-inside pl-3 pb-3">
+            <li>Added Web Socket support</li>
+            <li>Added a theme picker</li>
+            <li>Added a song picker</li>
+            <li>Added a leaderboard</li>
+          </ul>
+
+        </div>
       </template>
     </basicAccordion>
   </div>
