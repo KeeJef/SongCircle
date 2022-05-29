@@ -122,11 +122,6 @@ export default {
     this.roomInfo.roomSettings.time = "30 Seconds";
     this.roomInfo.roomSettings.theme = "None";
 
-    window.addEventListener("keypress", (e) => {
-      if (e.keyCode === 13) {
-        this.startGame();
-      }
-    });
   },
 };
 </script>

@@ -6,7 +6,7 @@ export const url = "http://localhost:8000";
 export const usePlayerInfo = defineStore({
   id: "playerInfo",
   state: () => {
-    return { playerEmoji: "", playerName: "", playerSocketID:null, playerModStatus: Boolean,};
+    return { playerEmoji: "", playerName: "", playerSocketID:null, playerModStatus: false, playerSongSelected:false};
   },
   getters: {},
   actions: {},

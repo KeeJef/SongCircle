@@ -16,14 +16,15 @@
 <script>
 import SearchComp from "../components/searchComp.vue";
 import userDisplayHorizontal from "../components/userDisplayHorizontal.vue";
-import { useRoomInfo, useSocket } from "@/store/index";
+import { useRoomInfo, useSocket, usePlayerInfo } from "@/store/index";
 
 export default {
   name: "SearchView",
   setup() {
     const roomInfo = useRoomInfo();
     const socketStore = useSocket();
-    return { roomInfo, socketStore };
+    const playerInfo = usePlayerInfo();
+    return { roomInfo, socketStore, playerInfo };
   },
   data() {
     return {};
@@ -36,6 +37,17 @@ export default {
   async mounted() {
     this.socketStore.socketObject.on("returnMembers", (data) => {
       this.roomInfo.members = data;
+    });
+
+    this.socketStore.socketObject.on("newSong", (playerSocketID) => {
+      for (let index = 0; index < this.roomInfo.members.length; index++) {
+        const element = this.roomInfo.members[index];
+
+        if (element.playerSocketID == playerSocketID) {
+          this.roomInfo.members[index].playerSongSelected = true;
+        }
+        
+      }
     });
   },
 };

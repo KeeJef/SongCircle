@@ -7,6 +7,7 @@
         :placeholder=this.placeHolderInfo :class="{ 'border border-rose-500': failedNameCheck }"
         id="username"
         type="text"
+        @keyup.enter="validateName"
         autocomplete="off"
         v-model="playerInfo.playerName" />
     </div>
@@ -168,11 +169,6 @@ export default {
     this.playerInfo.playerEmoji =
     this.shuffledEmojiList[this.emojiArrayPosition];
 
-    window.addEventListener("keypress", (e) => {
-      if (e.keyCode === 13) {
-        this.validateName();
-      }
-    });
   },
 };
 </script>

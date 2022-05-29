@@ -7,6 +7,7 @@
         class="basis-2/4 shadow appearance-none border max-w-[590px] rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
+        @keyup.enter="getSongs"
         placeholder="Enter your name"
         autocomplete="off"
         v-model="searchTerm" />
@@ -28,14 +29,7 @@
         :artistName="searchResultData.artistName"
         :albumArt="searchResultData.albumArt"
         :url="searchResultData.songPreviewUrl"
-        @click="
-          storeSelection(
-            searchResultData.songName,
-            searchResultData.artistName,
-            searchResultData.albumArt,
-            searchResultData.songPreviewUrl
-          )
-        " />
+         />
     </div>
 
     <div
@@ -70,6 +64,7 @@ export default {
   methods: {
     async getSongs() {
       this.ongoingSearch = true;
+      this.dataFetchStatus = false;
       this.searchResults = [{}];
       var transformedSearchTerm = this.searchTerm.replace(/\s/g, "+");
       try {
@@ -84,10 +79,7 @@ export default {
     async processSearchResults(data) {
       this.searchResults = data;
     },
-    async storeSelection(songName, artistName, albumArt, songPreviewUrl) {
-      //store this in state or communicate to thing or smth
-      console.log(songName, artistName, albumArt, songPreviewUrl);
-    },
+
   },
   components: {
     searchItem,
@@ -95,12 +87,6 @@ export default {
   },
   async mounted() {
     //remove this in favor of global socket
-
-    window.addEventListener("keypress", (e) => {
-      if (e.keyCode === 13) {
-        this.getSongs();
-      }
-    });
 
     this.socketStore.socketObject.on("searchResults", (data) => {
       this.processSearchResults(data);
