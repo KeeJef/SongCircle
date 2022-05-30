@@ -53,7 +53,7 @@ export default {
 
     this.socketStore.socketObject.on("startRound", (shuffledSongArray) => {
       this.roomInfo.shuffledSongs = shuffledSongArray;
-      //go to next screen
+      this.$router.push('vote')
     });
   },
 };

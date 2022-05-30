@@ -4,6 +4,7 @@ import LobbyView from '../views/LobbyView.vue'
 import JoinLobbyView from '../views/JoinLobbyView.vue'
 import JoinView from '../views/JoinView.vue'
 import SearchView from '../views/SearchView.vue'
+import VoteView from '../views/VoteView.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/search',
     name: 'search',
     component: SearchView
+  },
+  {
+    path: '/vote',
+    name: 'vote',
+    component: VoteView
   }
 ]
 
