@@ -67,6 +67,7 @@ server.on("connection", function (socket) {
 
     var roomObject = {
       roomID: roomID,
+      gameInProgress:false,
       roomSettings: { rounds: "3", time: "30 Seconds", theme: "Rock Anthems" },
       members: [],
       selectedSongs: [],
@@ -92,7 +93,7 @@ server.on("connection", function (socket) {
           //socket.emit("returnMembers", element.members)
           server.sockets.in(roomID).emit("returnMembers", element.members);
           //make sure users who join the room when the host is using default settings get current settings
-          server.sockets.in(roomID).emit("newSettings", element.roomSettings);
+          server.sockets.in(roomID).emit("newSettings", element.roomSettings, element.gameInProgress);
           return
         }
       }
@@ -126,6 +127,15 @@ server.on("connection", function (socket) {
   socket.on("startGame", function (roomInfo) {
     try {
       server.sockets.in(roomInfo.roomID).emit("startGameEvent");
+
+      for (let index = 0; index < roomsArray.length; index++) {
+        const element = roomsArray[index];
+
+        if (element.roomID == roomID) {
+          element.gameInProgress = true;
+        }
+      }
+
     } catch (error) {
       console.log(error);
     }

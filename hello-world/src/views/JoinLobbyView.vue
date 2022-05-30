@@ -67,8 +67,14 @@ export default {
       this.roomInfo.members = data;
     });
 
-    this.socketStore.socketObject.on("newSettings", (data) => {
-      this.roomInfo.roomSettings = data;
+    this.socketStore.socketObject.on("newSettings", (roomSettings, gameStatus) => {
+      this.roomInfo.roomSettings = roomSettings;
+      this.roomInfo.gameInProgress = gameStatus;
+
+      if (this.roomInfo.gameInProgress) {
+        this.$router.push("search");
+      }
+        
     });
 
     this.socketStore.socketObject.on("startGameEvent", () => {

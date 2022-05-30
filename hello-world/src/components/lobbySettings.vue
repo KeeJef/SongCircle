@@ -107,6 +107,7 @@ export default {
       try {
         this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
         this.socketStore.socketObject.emit("startGame", this.roomInfo);
+        this.roomInfo.gameInProgress = true
       } catch (error) {
         console.log(error)
         return
