@@ -40,6 +40,7 @@
 
     <div class="text-left"><b>Theme</b></div>
     <select
+      v-if="!this.isCustom"
       v-model="roomInfo.roomSettings.theme"
       :disabled="!isAdmin"
       @change="updateSelection"
@@ -49,7 +50,6 @@
         'w-full px-3 py-2 my-2 bg-slate-300 border-2 border-gray-300 rounded-lg cursor-not-allowed':
           !isAdmin,
       }">
-      <option value="None">None</option>
       <option value="Rock Anthems">Rock Anthems</option>
       <option value="Pop Anthems">Pop Anthems</option>
       <option value="Rap Music">Rap Music</option>
@@ -64,8 +64,9 @@
       <option value="90s Music">90s Music</option>
       <option value="2000s Music">2000s Music</option>
       <option value="2010s Music">2010s Music</option>
+      <option value="Custom">Custom</option>
     </select>
-
+    <input v-model="roomInfo.roomSettings.theme" v-if="this.isCustom" type="text" class=" w-full px-3 py-1 my-2 bg-white border-2 border-gray-300 rounded-lg focus:border-green-500">
     <div>
       <button v-if="isAdmin"
         @click="startGame"
@@ -91,7 +92,9 @@ export default {
     return { socketStore, roomInfo, playerInfo };
   },
   data() {
-    return {};
+    return {
+      isCustom: false,
+    };
   },
   components: {
   },
@@ -102,6 +105,7 @@ export default {
   methods: {
     startGame() {
       try {
+        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
         this.socketStore.socketObject.emit("startGame", this.roomInfo);
       } catch (error) {
         console.log(error)
@@ -110,6 +114,11 @@ export default {
       this.$router.push('search')
     },
     updateSelection(){
+      console.log(this.roomInfo)
+      if (this.roomInfo.roomSettings.theme == "Custom") {
+        this.isCustom = true
+        this.roomInfo.roomSettings.theme = ""
+      }
       try {
         this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
       } catch (error) {
@@ -120,7 +129,7 @@ export default {
   async mounted() {
     this.roomInfo.roomSettings.rounds = 3;
     this.roomInfo.roomSettings.time = "30 Seconds";
-    this.roomInfo.roomSettings.theme = "None";
+    this.roomInfo.roomSettings.theme = "Rock Anthems";
 
   },
 };

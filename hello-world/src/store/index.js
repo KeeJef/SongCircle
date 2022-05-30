@@ -15,7 +15,7 @@ export const usePlayerInfo = defineStore({
 export const useRoomInfo = defineStore({
   id: "roomInfo",
   state: () => {
-    return {roomID: "", roomSettings:{rounds:"",time:"",theme:""}, members: []};
+    return {roomID: "", roomSettings:{rounds:"",time:"",theme:""}, members: [], shuffledSongs:[]};
   },
   getters: {},
   actions: {},

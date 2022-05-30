@@ -29,26 +29,34 @@ server.on("connection", function (socket) {
       return;
     }
 
-    for (let index = 0; index < response.data.songs.data.length; index++) {
-      const element = response.data.songs.data[index].attributes;
+    try {
 
-      albumArtTransform = element.artwork.url;
-      albumArtTransform = albumArtTransform
-        .replace("{w}", "230")
-        .replace("{h}", "230");
-
-      songObject = {
-        id: index,
-        artistName: element.artistName,
-        songName: element.name,
-        songPreviewUrl: element.previews[0].url,
-        albumArt: albumArtTransform,
-      };
-
-      packagedResponse.push(songObject);
+      for (let index = 0; index < response.data.songs.data.length; index++) {
+        const element = response.data.songs.data[index].attributes;
+  
+        albumArtTransform = element.artwork.url;
+        albumArtTransform = albumArtTransform
+          .replace("{w}", "230")
+          .replace("{h}", "230");
+  
+        songObject = {
+          id: index,
+          artistName: element.artistName,
+          songName: element.name,
+          songPreviewUrl: element.previews[0].url,
+          albumArt: albumArtTransform,
+        };
+  
+        packagedResponse.push(songObject);
+      }
+  
+      socket.emit("searchResults", packagedResponse);
+      
+    } catch (error) {
+      console.log(error);
+      socket.emit("searchResults", 'Could not find any results');
     }
 
-    socket.emit("searchResults", packagedResponse);
   });
 
   //move logic for creation of random room to serverside
@@ -59,7 +67,7 @@ server.on("connection", function (socket) {
 
     var roomObject = {
       roomID: roomID,
-      roomSettings: { rounds: "3", time: "30 Seconds", theme: "None" },
+      roomSettings: { rounds: "3", time: "30 Seconds", theme: "Rock Anthems" },
       members: [],
       selectedSongs: [],
     };
@@ -85,6 +93,7 @@ server.on("connection", function (socket) {
           server.sockets.in(roomID).emit("returnMembers", element.members);
           //make sure users who join the room when the host is using default settings get current settings
           server.sockets.in(roomID).emit("newSettings", element.roomSettings);
+          return
         }
       }
     } catch (error) {
@@ -106,6 +115,7 @@ server.on("connection", function (socket) {
             .in(roomInfo.roomID)
             .emit("newSettings", element.roomSettings);
           console.log("Updated Room Settings");
+          return
         }
       }
     } catch (error) {
@@ -125,30 +135,32 @@ server.on("connection", function (socket) {
     // check array for previously selected song from user, if yes replace it, if no add it to array, then check if each member has playerSongSelected = true, if yes then randomise the array and start the game
 
     for (let index = 0; index < roomsArray.length; index++) {
-      const element = roomsArray[index];
+      serverRoom = roomsArray[index];
 
-      if ((element.roomID = roomInfo.roomID)) {
+      if ((serverRoom.roomID = roomInfo.roomID)) {
 
-        for (let index2 = 0; index2 < element.selectedSongs.length; index2++) {
-          element = element.selectedSongs[index2];
-          if (element.playerSocketID == playerSocketID) {
-            element.selectedSongs.push(selectedSong);
+        for (let index2 = 0; index2 < serverRoom.selectedSongs.length; index2++) {
+          serverSelectedSong = serverRoom.selectedSongs[index2];
+          if (serverSelectedSong.playerSocketID == playerSocketID) {
+
+            serverRoom.selectedSongs.splice(index2, 1);
+            serverRoom.selectedSongs.push(selectedSong);
 
             server.sockets.in(roomInfo.roomID).emit("newSong", playerSocketID);
             return
           }
             
           }
-          element.selectedSongs.push(selectedSong);
+          serverRoom.selectedSongs.push(selectedSong);
           server.sockets.in(roomInfo.roomID).emit("newSong", playerSocketID);
 
-          if (element.members.length == element.selectedSongs.length) {
+          if (serverRoom.members.length == serverRoom.selectedSongs.length) {
             console.log("All players have selected a song");
-             element.selectedSongs = shuffleArray(element.selectedSongs);
-            
-            server.sockets.in(roomInfo.roomID).emit("StartRound", selectedSongs);
+            serverRoom.selectedSongs = shuffleArray(serverRoom.selectedSongs);
+            server.sockets.in(roomInfo.roomID).emit("startRound", serverRoom.selectedSongs);
+            return
           }
-
+          return
         }
 
 

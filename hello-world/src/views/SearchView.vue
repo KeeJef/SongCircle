@@ -35,11 +35,12 @@ export default {
   },
   methods: {},
   async mounted() {
-    this.socketStore.socketObject.on("returnMembers", (data) => {
-      this.roomInfo.members = data;
+    this.socketStore.socketObject.on("returnMembers", (membersArray) => {
+      this.roomInfo.members = membersArray;
     });
 
     this.socketStore.socketObject.on("newSong", (playerSocketID) => {
+      console.log("NewSongEvent Fired")
       for (let index = 0; index < this.roomInfo.members.length; index++) {
         const element = this.roomInfo.members[index];
 
@@ -48,6 +49,11 @@ export default {
         }
         
       }
+    });
+
+    this.socketStore.socketObject.on("startRound", (shuffledSongArray) => {
+      this.roomInfo.shuffledSongs = shuffledSongArray;
+      //go to next screen
     });
   },
 };

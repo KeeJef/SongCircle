@@ -1,14 +1,14 @@
 <template>
   <div
     class="container min-h-[150px] max-w-[935px] bg-white rounded px-2 py-2">
-    <div class="text-4xl py-3 select-none">Search for a song</div>
+    <div class="text-4xl py-3 select-none">Theme: {{this.roomInfo.roomSettings.theme}}</div>
     <div class="flex justify-center py-3 gap-1">
       <input
         class="basis-2/4 shadow appearance-none border max-w-[590px] rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
         @keyup.enter="getSongs"
-        placeholder="Enter your name"
+        placeholder='Search for a song'
         autocomplete="off"
         v-model="searchTerm" />
       <button
@@ -44,13 +44,14 @@
 <script>
 import searchItem from "../components/searchItem.vue";
 import SearchPlaceholder from "../components/searchPlaceholder.vue";
-import { useSocket } from "@/store/index";
+import { useSocket, useRoomInfo } from "@/store/index";
 
 export default {
   name: "SearchComp",
   setup() {
     const socketStore = useSocket();
-    return { socketStore };
+    const roomInfo = useRoomInfo();
+    return { socketStore, roomInfo };
   },
   data() {
     return {
@@ -88,10 +89,17 @@ export default {
   async mounted() {
     //remove this in favor of global socket
 
-    this.socketStore.socketObject.on("searchResults", (data) => {
-      this.processSearchResults(data);
-      this.ongoingSearch = false;
-      this.dataFetchStatus = true;
+    this.socketStore.socketObject.on("searchResults", (searchResult) => {
+
+      if (searchResult == "Could not find any results") {
+        this.searchTerm = searchResult
+        this.dataFetchStatus = false;
+        this.ongoingSearch = false;
+      } else {
+        this.processSearchResults(searchResult);
+        this.dataFetchStatus = true;
+        this.ongoingSearch = false;
+      }
     });
   },
 };

@@ -13,7 +13,7 @@
         {{ artistName }}
       </div>
     </div>
-    <button class=" bg-white hover:bg-slate-200 text-black font-bold mt-6 px-6 py-2 rounded" v-if="isClicked" @click="selectSong">Select</button>  
+    <button class=" bg-white hover:bg-slate-200 text-black font-bold mt-3 px-6 py-2 rounded" v-if="isClicked" @click="selectSong">Select</button>  
   </div>
 </template>
 
