@@ -1,13 +1,21 @@
 <template>
-  <div class="m-3 p-3 w-fit min-h-[282px] min-w-[230px] bg-slate-100 rounded">
+  <div class="container bg-white max-w-[935px] flex justify-center mt-2 rounded">
+    <div class="text-2xl">Who added this song?</div>
+    <div>
+      
+    </div>
 
   </div>
 </template>
 
 <script>
-
+import {useRoomInfo} from "@/store/index";
 export default {
   name: "voteSelector",
+  setup() {
+    const roomInfo = useRoomInfo();
+    return { roomInfo };
+  },
   data() {
     return {
 

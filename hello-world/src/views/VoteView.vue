@@ -5,13 +5,12 @@
         ><img src="../assets/songcircle.png" alt="SongCircle Logo"
       /></a>
     </div>
-    <div>vote view</div>
     <div
       class="px-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
       <userDisplayHorizontal></userDisplayHorizontal>
     </div>
-    <div class="px-2 flex flex-row sm:flex-col sm:flex items-center justify-center">
-      <selectedSongDisplay></selectedSongDisplay>
+    <div class="px-2 flex-col flex items-center justify-center">
+      <selectedSongDisplay :albumArt="this.currentAlbumArt" :artistName="this.currentArtistName" :songName="this.currentSongName" :url="this.currentUrl"></selectedSongDisplay>
       <voteSelector></voteSelector>
     </div>
   </div>
@@ -32,7 +31,12 @@ export default {
     return { roomInfo, socketStore, playerInfo };
   },
   data() {
-    return {};
+    return {
+      currentAlbumArt: "",
+      currentSongName: "",
+      currentArtistName: "",
+      currentUrl: "",
+    };
   },
   components: {
     userDisplayHorizontal,
@@ -40,6 +44,16 @@ export default {
     selectedSongDisplay,
   },
   methods: {},
-  async mounted() {},
+  async mounted() {
+    try {
+      this.currentAlbumArt = this.roomInfo.shuffledSongs[0].albumArt;
+      this.currentSongName = this.roomInfo.shuffledSongs[0].songName;
+      this.currentArtistName = this.roomInfo.shuffledSongs[0].artistName;
+      this.currentUrl = this.roomInfo.shuffledSongs[0].url;
+    } catch (error) {
+      console.log(error)
+    }
+      
+  },
 };
 </script>

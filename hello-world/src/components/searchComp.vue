@@ -21,7 +21,7 @@
     </div>
     <div
       v-if="this.dataFetchStatus"
-      class="flex flex-wrap justify-center cursor-pointer">
+      class="flex flex-wrap justify-center cursor-pointer max-w-[230px]max-h-[230px]">
       <searchItem
         v-for="searchResultData in searchResults"
         :key="searchResultData.id"
