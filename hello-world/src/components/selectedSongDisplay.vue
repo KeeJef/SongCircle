@@ -1,7 +1,7 @@
 <template>
   <div class="container max-w-[935px] flex justify-center mt-2 rounded overflow-hidden relative">
-    <img class="opacity-50 absolute w-full left-0 top-0 min-h-[466px]" :src="this.albumArt" alt="">
-    <div class="p-1 w-fit max-w-[350px] rounded relative">
+    <img v-if="this.windowSize > 400" class="opacity-50 absolute w-full left-0 top-0 min-h-[466px]" :src="this.albumArt" alt="">
+    <div class="p-1 m-4 w-fit max-w-[350px] rounded relative">
       <img
         :src="this.albumArt"
         @click="playSong()"
@@ -24,10 +24,11 @@
 
 <script>
 export default {
-  name: "voteSelector",
+  name: "selectedSongDisplay",
   data() {
     return {
       playStatus: false,
+      windowSize:"",
     };
   },
   props: {
@@ -48,5 +49,10 @@ export default {
     },
   },
   components: {},
+  mounted() {
+
+    this.windowSize = window.innerWidth;
+
+  },
 };
 </script>

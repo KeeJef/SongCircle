@@ -9,7 +9,6 @@ const io = require("socket.io")({
 server = io.listen(8000);
 console.log("Running on port " + 8000);
 
-
 roomsArray = []; //This is all being stored in memory which is bad
 server.on("connection", function (socket) {
   console.log("A user connected");
@@ -30,15 +29,14 @@ server.on("connection", function (socket) {
     }
 
     try {
-
       for (let index = 0; index < response.data.songs.data.length; index++) {
         const element = response.data.songs.data[index].attributes;
-  
+
         albumArtTransform = element.artwork.url;
         albumArtTransform = albumArtTransform
           .replace("{w}", "350")
           .replace("{h}", "350");
-  
+
         songObject = {
           id: index,
           artistName: element.artistName,
@@ -46,17 +44,15 @@ server.on("connection", function (socket) {
           songPreviewUrl: element.previews[0].url,
           albumArt: albumArtTransform,
         };
-  
+
         packagedResponse.push(songObject);
       }
-  
+
       socket.emit("searchResults", packagedResponse);
-      
     } catch (error) {
       console.log(error);
-      socket.emit("searchResults", 'Could not find any results');
+      socket.emit("searchResults", "Could not find any results");
     }
-
   });
 
   //move logic for creation of random room to serverside
@@ -67,7 +63,8 @@ server.on("connection", function (socket) {
 
     var roomObject = {
       roomID: roomID,
-      gameInProgress:false,
+      gameInProgress: false,
+      currentRound: 0,
       roomSettings: { rounds: "3", time: "30 Seconds", theme: "Rock Anthems" },
       members: [],
       selectedSongs: [],
@@ -93,8 +90,10 @@ server.on("connection", function (socket) {
           //socket.emit("returnMembers", element.members)
           server.sockets.in(roomID).emit("returnMembers", element.members);
           //make sure users who join the room when the host is using default settings get current settings
-          server.sockets.in(roomID).emit("newSettings", element.roomSettings, element.gameInProgress);
-          return
+          server.sockets
+            .in(roomID)
+            .emit("newSettings", element.roomSettings, element.gameInProgress);
+          return;
         }
       }
     } catch (error) {
@@ -116,11 +115,37 @@ server.on("connection", function (socket) {
             .in(roomInfo.roomID)
             .emit("newSettings", element.roomSettings);
           console.log("Updated Room Settings");
-          return
+          return;
         }
       }
     } catch (error) {
       console.log("Failure to update room " + error);
+    }
+  });
+
+  socket.on("vote", function (roomInfo, voteObject) {
+    try {
+      for (let i = 0; i < roomsArray.length; i++) {
+        const room = roomsArray[i];
+
+        if ((room.roomID = roomInfo.roomID)) {
+          for (let j = 0; j < room.selectedSongs.length; j++) {
+            const songObject = room.selectedSongs[j];
+
+            if (songObject.selectedSong.playerSocketID == voteObject.voteFor) {
+              songObject.voteArray.push(voteObject);
+              server.sockets.in(roomInfo.roomID).emit("newVote", voteObject.voteBy);
+
+              if (songObject.voteArray.length == room.members.length) {
+                server.sockets.in(roomInfo.roomID).emit("nextVote");
+              }
+              return
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
     }
   });
 
@@ -135,7 +160,6 @@ server.on("connection", function (socket) {
           element.gameInProgress = true;
         }
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -146,37 +170,38 @@ server.on("connection", function (socket) {
 
     for (let index = 0; index < roomsArray.length; index++) {
       serverRoom = roomsArray[index];
+      songObject = {selectedSong:selectedSong, voteArray:[]}
 
       if ((serverRoom.roomID = roomInfo.roomID)) {
-
-        for (let index2 = 0; index2 < serverRoom.selectedSongs.length; index2++) {
+        for (
+          let index2 = 0;
+          index2 < serverRoom.selectedSongs.length;
+          index2++
+        ) {
           serverSelectedSong = serverRoom.selectedSongs[index2];
           if (serverSelectedSong.playerSocketID == playerSocketID) {
-
             serverRoom.selectedSongs.splice(index2, 1);
-            serverRoom.selectedSongs.push(selectedSong);
+            serverRoom.selectedSongs.push(songObject);
 
             server.sockets.in(roomInfo.roomID).emit("newSong", playerSocketID);
-            return
+            return;
           }
-            
-          }
-          serverRoom.selectedSongs.push(selectedSong);
-          server.sockets.in(roomInfo.roomID).emit("newSong", playerSocketID);
-
-          if (serverRoom.members.length == serverRoom.selectedSongs.length) {
-            console.log("All players have selected a song");
-            serverRoom.selectedSongs = shuffleArray(serverRoom.selectedSongs);
-            server.sockets.in(roomInfo.roomID).emit("startRound", serverRoom.selectedSongs);
-            return
-          }
-          return
         }
+        serverRoom.selectedSongs.push(songObject);
+        server.sockets.in(roomInfo.roomID).emit("newSong", playerSocketID);
 
-
+        if (serverRoom.members.length == serverRoom.selectedSongs.length) {
+          console.log("All players have selected a song");
+          serverRoom.selectedSongs = shuffleArray(serverRoom.selectedSongs);
+          server.sockets
+            .in(roomInfo.roomID)
+            .emit("startRound", serverRoom.selectedSongs);
+          return;
+        }
+        return;
       }
     }
-  );
+  });
 
   socket.on("disconnect", function () {
     for (let i = 0; i < roomsArray.length; i++) {
@@ -201,7 +226,7 @@ server.on("connection", function (socket) {
   });
 });
 
-function shuffleArray (array) {
+function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var temp = array[i];

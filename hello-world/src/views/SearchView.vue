@@ -51,8 +51,21 @@ export default {
       }
     });
 
+        this.socketStore.socketObject.on("newVote", (playerSocketID) => {
+      console.log("NewVote Fired")
+      for (let index = 0; index < this.roomInfo.members.length; index++) {
+        const element = this.roomInfo.members[index];
+
+        if (element.playerSocketID == playerSocketID) {
+          this.roomInfo.members[index].playerSongSelected = true;
+        }
+        
+      }
+    });
+
     this.socketStore.socketObject.on("startRound", (shuffledSongArray) => {
       this.roomInfo.shuffledSongs = shuffledSongArray;
+      //clear the playerSongSelected so i can use the tick in other views
       this.roomInfo.members.forEach((element) => {
         element.playerSongSelected = false;
       });

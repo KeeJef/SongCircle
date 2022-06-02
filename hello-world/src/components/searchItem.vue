@@ -13,7 +13,7 @@
         {{ artistName }}
       </div>
     </div>
-    <button class=" bg-white hover:bg-slate-200 text-black font-bold mt-3 px-6 py-2 rounded" v-if="isClicked" @click="selectSong">Select</button>  
+    <button class=" bg-white hover:bg-slate-200 text-black font-bold mt-3 px-6 py-2 rounded" v-if="isClicked" @click="selectSong">{{buttonName}}</button>  
   </div>
 </template>
 
@@ -30,6 +30,7 @@ export default {
   data() {
     return {
       isClicked: false,
+      buttonName: "Select",
     };
   },
   props: {
@@ -48,6 +49,7 @@ export default {
         playerSocketID:this.playerInfo.playerSocketID
       }, this.roomInfo , this.playerInfo.playerSocketID);
       this.isClicked = false;
+      this.buttonName = "Selected";
     }
     },
 

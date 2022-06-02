@@ -11,7 +11,7 @@
     </div>
     <div class="px-2 flex-col flex items-center justify-center">
       <selectedSongDisplay :albumArt="this.currentAlbumArt" :artistName="this.currentArtistName" :songName="this.currentSongName" :url="this.currentUrl"></selectedSongDisplay>
-      <voteSelector></voteSelector>
+      <voteSelector :currentSongPlayerSocketID="this.currentSongPlayerSocketID"></voteSelector>
     </div>
   </div>
 </template>
@@ -23,7 +23,7 @@ import { useRoomInfo, useSocket, usePlayerInfo } from "@/store/index";
 import userDisplayHorizontal from "../components/userDisplayHorizontal.vue";
 
 export default {
-  name: "SearchView",
+  name: "voteView",
   setup() {
     const roomInfo = useRoomInfo();
     const socketStore = useSocket();
@@ -36,6 +36,8 @@ export default {
       currentSongName: "",
       currentArtistName: "",
       currentUrl: "",
+      currentSongPlayerSocketID: "",
+      index: 0,
     };
   },
   components: {
@@ -43,16 +45,38 @@ export default {
     voteSelector,
     selectedSongDisplay,
   },
-  methods: {},
+  methods: {
+  },
   async mounted() {
     try {
-      this.currentAlbumArt = this.roomInfo.shuffledSongs[0].albumArt;
-      this.currentSongName = this.roomInfo.shuffledSongs[0].songName;
-      this.currentArtistName = this.roomInfo.shuffledSongs[0].artistName;
-      this.currentUrl = this.roomInfo.shuffledSongs[0].url;
+      this.currentAlbumArt = this.roomInfo.shuffledSongs[this.index].selectedSong.albumArt;
+      this.currentSongName = this.roomInfo.shuffledSongs[this.index].selectedSong.songName;
+      this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
+      this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
+      this.currentSongPlayerSocketID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
     } catch (error) {
       console.log(error)
     }
+
+    this.socketStore.socketObject.on("nextVote", () => {
+      this.index ++;
+      for (let index = 0; index < this.roomInfo.members.length; index++) {
+        const element = this.roomInfo.members[index];
+        element.playerSongSelected = false;
+
+      }
+
+      if (this.index >= this.roomInfo.shuffledSongs.length) {
+        //go to next screen
+        console.log("Voted on all songs")
+      } 
+      this.currentAlbumArt = this.roomInfo.shuffledSongs[this.index].selectedSong.albumArt;
+      this.currentSongName = this.roomInfo.shuffledSongs[this.index].selectedSong.songName;
+      this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
+      this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
+      this.currentSongPlayerSocketID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
+    });
+
       
   },
 };
