@@ -1,0 +1,5 @@
+Allow users who join while room is voting to join in on voting and in next round contribute 
+Show who got correct vote at end of round
+Allow user to change settings betwen rounds
+Show scoreboard interround
+Change logo

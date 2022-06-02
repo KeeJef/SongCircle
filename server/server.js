@@ -64,7 +64,8 @@ server.on("connection", function (socket) {
     var roomObject = {
       roomID: roomID,
       gameInProgress: false,
-      currentRound: 0,
+      votingMode: false,
+      currentVoteRound: 0,
       roomSettings: { rounds: "3", time: "30 Seconds", theme: "Rock Anthems" },
       members: [],
       selectedSongs: [],
@@ -137,6 +138,7 @@ server.on("connection", function (socket) {
               server.sockets.in(roomInfo.roomID).emit("newVote", voteObject.voteBy);
 
               if (songObject.voteArray.length == room.members.length) {
+                room.currentVoteRound ++;
                 server.sockets.in(roomInfo.roomID).emit("nextVote");
               }
               return
@@ -196,6 +198,7 @@ server.on("connection", function (socket) {
           server.sockets
             .in(roomInfo.roomID)
             .emit("startRound", serverRoom.selectedSongs);
+            serverRoom.votingMode = true;
           return;
         }
         return;
