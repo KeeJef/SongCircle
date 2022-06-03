@@ -36,6 +36,7 @@ export default {
     songName: String,
     artistName: String,
     url: String,
+    slowMode: Boolean,
   },
   methods: {
     playSong() {

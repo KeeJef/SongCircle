@@ -1,30 +1,63 @@
 <template>
-<div>end round</div>
-<!-- Load scoreboard -->
+  <div class="p-2">
+    <div id="logo" class="container flex justify-center mx-auto pb-5">
+      <a href="."
+        ><img src="../assets/songcircle.png" alt="SongCircle Logo"
+      /></a>
+    </div>
+    <div
+      class="px-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
+      <userDisplayHorizontal></userDisplayHorizontal>
+    </div>
+    <div class="px-2 flex-col flex items-center justify-center">
+      <selectedSongDisplay :albumArt="this.currentAlbumArt" :artistName="this.currentArtistName" :songName="this.currentSongName" :url="this.currentUrl"></selectedSongDisplay>
+      <scoreboardDisplay :currentSongID="this.currentSongID"></scoreboardDisplay>
+    </div>
+  </div>
 </template>
 
 <script>
-
+import selectedSongDisplay from "../components/selectedSongDisplay.vue";
+import userDisplayHorizontal from "../components/userDisplayHorizontal.vue";
+import scoreboardDisplay from "../components/scoreboardDisplay.vue";
 import { useRoomInfo, useSocket, usePlayerInfo} from "@/store/index";
+
 export default {
   name: "EndRound",
   setup() {
     const socketStore = useSocket();
     const roomInfo = useRoomInfo();
     const playerInfo = usePlayerInfo();
-
     return { socketStore, roomInfo, playerInfo };
   },
   data() {
     return {
+      currentAlbumArt: "",
+      currentSongName: "",
+      currentArtistName: "",
+      currentUrl: "",
+      currentSongID: "",
+      index: 0,
     };
   },
   components: {
+    selectedSongDisplay,
+    userDisplayHorizontal,
+    scoreboardDisplay,
   },
   methods: {
 
   },
   async mounted() {
+        try {
+      this.currentAlbumArt = this.roomInfo.shuffledSongs[this.index].selectedSong.albumArt;
+      this.currentSongName = this.roomInfo.shuffledSongs[this.index].selectedSong.songName;
+      this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
+      this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
+      this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
+    } catch (error) {
+      console.log(error)
+    }
   },
 };
 </script>

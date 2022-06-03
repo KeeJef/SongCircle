@@ -90,7 +90,7 @@ server.on("connection", function (socket) {
         if (element.roomID == roomID) {
           playerInfo.playerSocketID = socket.id;
           element.members.push(playerInfo);
-          element.scoreboard.push({playerID: playerInfo.playerSocketID, score: 0})
+          element.scoreboard.push({playerName:playerInfo.playerName, playerEmoji:playerInfo.playerEmoji, playerID: playerInfo.playerSocketID, score: 0, winArray:[]})
           //socket.emit("returnMembers", element.members)
           server.sockets.in(roomID).emit("returnMembers", element.members);
           //make sure users who join the room when the host is using default settings get current settings
@@ -263,6 +263,7 @@ function calculateScoreboard(selectedSongs, scoreboard) {
 
       if (songVote.voteFor == song.selectedSong.playerSocketID) {
         objIndex = scoreboard.findIndex((obj => obj.playerID == songVote.voteBy));
+        scoreboard[objIndex].winArray.push(song.selectedSong.songID);
         scoreboard[objIndex].score += 10;
       }
         
