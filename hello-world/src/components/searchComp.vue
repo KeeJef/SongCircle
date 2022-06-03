@@ -29,6 +29,7 @@
         :artistName="searchResultData.artistName"
         :albumArt="searchResultData.albumArt"
         :url="searchResultData.songPreviewUrl"
+        :songID="searchResultData.songID"
          />
     </div>
 

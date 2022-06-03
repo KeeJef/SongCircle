@@ -3,7 +3,7 @@
     class="container bg-white max-w-[935px] flex flex-col justify-center mt-2 rounded">
     <div class="text-2xl p-1">Who added this song?</div>
     <div class="flex justify-center">
-      <button v-for="member in this.roomInfo.members" :key="member.id" @click="vote()"
+      <button v-for="member in this.roomInfo.members" :key="member.id" @click="vote(member.playerSocketID)"
         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mt-2 mb-4 mx-2 rounded" :class="{ 'pointer-events-none cursor-not-allowed': votedStatus }">
         {{ member.playerName }} {{member.playerEmoji}}
       </button>
@@ -27,12 +27,13 @@ export default {
     };
   },
   props: {
-    currentSongPlayerSocketID: String
+    currentSongID: String
   },
   methods: {
-    vote(){
+    vote(playerSocketID){
       try {
-        var voteObject = {voteFor: this.currentSongPlayerSocketID, voteBy: this.playerInfo.playerSocketID};
+        var voteObject = {songID:this.currentSongID, voteFor: playerSocketID, voteBy: this.playerInfo.playerSocketID};
+
         this.socketStore.socketObject.emit("vote",this.roomInfo, voteObject);
         this.votedStatus = true;
       } catch (error) {

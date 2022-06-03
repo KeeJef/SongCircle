@@ -40,6 +40,7 @@ server.on("connection", function (socket) {
         songObject = {
           id: index,
           artistName: element.artistName,
+          songID: Math.floor(Math.random() * 1000000).toString().padStart(6, "0"),
           songName: element.name,
           songPreviewUrl: element.previews[0].url,
           albumArt: albumArtTransform,
@@ -69,6 +70,7 @@ server.on("connection", function (socket) {
       roomSettings: { rounds: "3", time: "30 Seconds", theme: "Rock Anthems" },
       members: [],
       selectedSongs: [],
+      scoreboard: [],
     };
     roomsArray.push(roomObject);
 
@@ -88,6 +90,7 @@ server.on("connection", function (socket) {
         if (element.roomID == roomID) {
           playerInfo.playerSocketID = socket.id;
           element.members.push(playerInfo);
+          element.scoreboard.push({playerID: playerInfo.playerSocketID, score: 0})
           //socket.emit("returnMembers", element.members)
           server.sockets.in(roomID).emit("returnMembers", element.members);
           //make sure users who join the room when the host is using default settings get current settings
@@ -133,12 +136,18 @@ server.on("connection", function (socket) {
           for (let j = 0; j < room.selectedSongs.length; j++) {
             const songObject = room.selectedSongs[j];
 
-            if (songObject.selectedSong.playerSocketID == voteObject.voteFor) {
+            if (songObject.selectedSong.songID == voteObject.songID) {
               songObject.voteArray.push(voteObject);
               server.sockets.in(roomInfo.roomID).emit("newVote", voteObject.voteBy);
 
               if (songObject.voteArray.length == room.members.length) {
                 room.currentVoteRound ++;
+
+                if (room.currentVoteRound >= room.selectedSongs.length) {
+                  calculateScoreboard(room.selectedSongs, room.scoreboard);
+                  server.sockets.in(roomInfo.roomID).emit("nextRound", room.scoreboard);
+                }
+
                 server.sockets.in(roomInfo.roomID).emit("nextVote");
               }
               return
@@ -238,3 +247,28 @@ function shuffleArray(array) {
   }
   return array;
 }
+
+function calculateScoreboard(selectedSongs, scoreboard) {
+
+  for (let i = 0; i < selectedSongs.length; i++) {
+    const song = selectedSongs[i];
+
+    for (let j = 0; j < song.voteArray.length; j++) {
+      const songVote = song.voteArray[j];
+
+      if (songVote.voteBy == songVote.voteFor) {
+        //dont score votes for self
+        continue
+      }
+
+      if (songVote.voteFor == song.selectedSong.playerSocketID) {
+        objIndex = scoreboard.findIndex((obj => obj.playerID == songVote.voteBy));
+        scoreboard[objIndex].score += 10;
+      }
+        
+      }
+      
+    }
+
+}
+

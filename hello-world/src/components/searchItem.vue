@@ -38,6 +38,7 @@ export default {
     artistName: String,
     albumArt: String,
     url: String,
+    songID: String
   },
   methods: {
     async selectSong() {
@@ -46,7 +47,8 @@ export default {
         artistName: this.artistName,
         albumArt: this.albumArt,
         url: this.url,
-        playerSocketID:this.playerInfo.playerSocketID
+        playerSocketID:this.playerInfo.playerSocketID,
+        songID:this.songID
       }, this.roomInfo , this.playerInfo.playerSocketID);
       this.isClicked = false;
       this.buttonName = "Selected";

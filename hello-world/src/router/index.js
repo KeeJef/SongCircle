@@ -5,6 +5,7 @@ import JoinLobbyView from '../views/JoinLobbyView.vue'
 import JoinView from '../views/JoinView.vue'
 import SearchView from '../views/SearchView.vue'
 import VoteView from '../views/VoteView.vue'
+import EndRound from '../views/EndRound.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/vote',
     name: 'vote',
     component: VoteView
+  },
+  {
+    path: '/endRound',
+    name: 'endRound',
+    component: EndRound
   }
 ]
 

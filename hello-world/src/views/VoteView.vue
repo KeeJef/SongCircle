@@ -11,7 +11,7 @@
     </div>
     <div class="px-2 flex-col flex items-center justify-center">
       <selectedSongDisplay :albumArt="this.currentAlbumArt" :artistName="this.currentArtistName" :songName="this.currentSongName" :url="this.currentUrl"></selectedSongDisplay>
-      <voteSelector :currentSongPlayerSocketID="this.currentSongPlayerSocketID"></voteSelector>
+      <voteSelector :currentSongID="this.currentSongID"></voteSelector>
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
       currentSongName: "",
       currentArtistName: "",
       currentUrl: "",
-      currentSongPlayerSocketID: "",
+      currentSongID: "",
       index: 0,
     };
   },
@@ -53,28 +53,29 @@ export default {
       this.currentSongName = this.roomInfo.shuffledSongs[this.index].selectedSong.songName;
       this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
       this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
-      this.currentSongPlayerSocketID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
+      this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
     } catch (error) {
       console.log(error)
     }
 
     this.socketStore.socketObject.on("nextVote", () => {
       this.index ++;
+
       for (let index = 0; index < this.roomInfo.members.length; index++) {
         const element = this.roomInfo.members[index];
         element.playerSongSelected = false;
-
       }
 
-      if (this.index >= this.roomInfo.shuffledSongs.length) {
-        //go to next screen
-        console.log("Voted on all songs")
-      } 
       this.currentAlbumArt = this.roomInfo.shuffledSongs[this.index].selectedSong.albumArt;
       this.currentSongName = this.roomInfo.shuffledSongs[this.index].selectedSong.songName;
       this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
       this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
-      this.currentSongPlayerSocketID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
+      this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
+    });
+
+    this.socketStore.socketObject.on("nextRound", (scoreboard) => {
+        this.roomInfo.scoreboard = scoreboard;
+        this.$router.push('endRound');
     });
 
       
