@@ -11,7 +11,7 @@
     </div>
     <div class="px-2 flex-col flex items-center justify-center">
       <selectedSongDisplay :albumArt="this.currentAlbumArt" :artistName="this.currentArtistName" :songName="this.currentSongName" :url="this.currentUrl"></selectedSongDisplay>
-      <scoreboardDisplay :currentSongID="this.currentSongID"></scoreboardDisplay>
+      <scoreboardDisplay :currentSongID="this.currentSongID" :currentPlayerSelectedSong="this.currentSongPlayerID"></scoreboardDisplay>
     </div>
   </div>
 </template>
@@ -37,6 +37,7 @@ export default {
       currentArtistName: "",
       currentUrl: "",
       currentSongID: "",
+      currentSongPlayerID: "",
       index: 0,
     };
   },
@@ -55,6 +56,7 @@ export default {
       this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
       this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
       this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
+      this.currentSongPlayerID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
     } catch (error) {
       console.log(error)
     }

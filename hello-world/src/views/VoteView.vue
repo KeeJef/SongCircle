@@ -61,7 +61,13 @@ export default {
     this.socketStore.socketObject.on("nextVote", () => {
       this.index ++;
 
-      for (let index = 0; index < this.roomInfo.members.length; index++) {
+      if (this.index >= this.roomInfo.shuffledSongs.length) {
+        return
+      }
+
+      try {
+
+              for (let index = 0; index < this.roomInfo.members.length; index++) {
         const element = this.roomInfo.members[index];
         element.playerSongSelected = false;
       }
@@ -71,6 +77,13 @@ export default {
       this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
       this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
       this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
+
+      } catch (error) {
+        console.log(error)
+        console.log("Probably played with 1 player")
+      }
+
+
     });
 
     this.socketStore.socketObject.on("nextRound", (scoreboard) => {

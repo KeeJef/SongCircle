@@ -4,7 +4,7 @@
     <div class="text-4xl py-3 select-none">Theme: {{this.roomInfo.roomSettings.theme}}</div>
     <div class="flex justify-center py-3 gap-1">
       <input
-        class="basis-2/4 shadow appearance-none border max-w-[590px] rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="basis-3/4 shadow appearance-none border max-w-[590px] rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         id="username"
         type="text"
         @keyup.enter="getSongs"
@@ -37,7 +37,7 @@
       v-else
       class="flex flex-wrap justify-center"
       :class="{ 'animate-pulse': ongoingSearch }">
-      <searchPlaceholder v-for="index in 6" :key="index" />
+      <searchPlaceholder v-for="index in 3" :key="index" />
     </div>
   </div>
 </template>

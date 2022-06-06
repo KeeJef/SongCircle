@@ -34,8 +34,8 @@ server.on("connection", function (socket) {
 
         albumArtTransform = element.artwork.url;
         albumArtTransform = albumArtTransform
-          .replace("{w}", "350")
-          .replace("{h}", "350");
+          .replace("{w}", "400")
+          .replace("{h}", "400");
 
         songObject = {
           id: index,

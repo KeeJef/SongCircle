@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-3 w-fit max-w-[230px] hover:bg-slate-200 rounded"
+    class="p-3 w-fit max-w-[300px] hover:bg-slate-200 rounded"
     :class="{ 'bg-green-500 hover:bg-green-500': isClicked }"
     @click="isClicked = !isClicked">
     <img

@@ -14,6 +14,8 @@
 </template>
 
 <script>
+//todo add timer using this https://stackoverflow.com/questions/55773602/how-do-i-create-a-simple-10-seconds-countdown-in-vue-js
+
 import SearchComp from "../components/searchComp.vue";
 import userDisplayHorizontal from "../components/userDisplayHorizontal.vue";
 import { useRoomInfo, useSocket, usePlayerInfo } from "@/store/index";
