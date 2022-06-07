@@ -18,7 +18,7 @@
             @click="nextReveal()"
             class="bg-green-500 hover:bg-green-700 text-white font-bold px-6 py-2 my-3 rounded"
             v-if="this.playerInfo.playerModStatus">
-            Next Song
+            {{this.buttonText}}
           </button>
         </div>
       </div>
@@ -46,18 +46,21 @@
 </template>
 
 <script>
-import { useRoomInfo, usePlayerInfo } from "@/store/index";
+import { useRoomInfo, usePlayerInfo, useSocket } from "@/store/index";
 export default {
   name: "scoreboardDisplay",
   setup() {
     const roomInfo = useRoomInfo();
     const playerInfo = usePlayerInfo();
-    return { roomInfo, playerInfo };
+    const socketStore = useSocket();
+    return { roomInfo, playerInfo, socketStore };
   },
   data() {
     return {
       reveal: false,
       currentUsername: "",
+      buttonText: "Next song",
+      index: 0
     };
   },
   props: {
@@ -81,7 +84,19 @@ export default {
       this.reveal = true;
     },
     nextReveal() {
-      //fire event to signal next song to reveal, other clients listen to this
+      this.index++;
+
+      if (this.index == this.roomInfo.shuffledSongs.length) {
+        this.socketStore.socketObject.emit("nextGame",this.roomInfo)
+        return
+      }
+
+      if(this.index == this.roomInfo.shuffledSongs.length -1){
+        this.buttonText = "Next round"
+      }
+
+        this.socketStore.socketObject.emit("nextReveal",this.roomInfo);
+        
     },
   },
   components: {},

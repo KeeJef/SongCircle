@@ -176,6 +176,22 @@ server.on("connection", function (socket) {
     }
   });
 
+  socket.on("nextReveal", function (roomInfo) {
+    try {
+      server.sockets.in(roomInfo.roomID).emit("nextRevealEvent");
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  socket.on("nextGame", function (roomInfo) {
+    try {
+      server.sockets.in(roomInfo.roomID).emit("nextGameEvent");
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   socket.on("songChosen", function (selectedSong, roomInfo, playerSocketID) {
     // check array for previously selected song from user, if yes replace it, if no add it to array, then check if each member has playerSongSelected = true, if yes then randomise the array and start the game
 

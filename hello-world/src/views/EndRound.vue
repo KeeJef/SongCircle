@@ -60,7 +60,30 @@ export default {
     } catch (error) {
       console.log(error)
     }
-  },
+ 
+    this.socketStore.socketObject.on("nextRevealEvent", () => {
+      console.log("event rc")
+      this.index ++;
+
+      try {
+
+      this.currentAlbumArt = this.roomInfo.shuffledSongs[this.index].selectedSong.albumArt;
+      this.currentSongName = this.roomInfo.shuffledSongs[this.index].selectedSong.songName;
+      this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
+      this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
+      this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
+
+      } catch (error) {
+        console.log(error)
+        console.log("Probably played with 1 player")
+      }
+    });
+
+    this.socketStore.socketObject.on("nextGameEvent", () => {
+      this.$router.push('nextGame');
+    });
+ 
+ },
 };
 </script>
 

@@ -6,6 +6,7 @@ import JoinView from '../views/JoinView.vue'
 import SearchView from '../views/SearchView.vue'
 import VoteView from '../views/VoteView.vue'
 import EndRound from '../views/EndRound.vue'
+import nextGame from '../views/NextGame.vue'
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/endRound',
     name: 'endRound',
     component: EndRound
+  },
+  {
+    path: '/nextGame',
+    name: 'nextGame',
+    component: nextGame
   }
 ]
 
