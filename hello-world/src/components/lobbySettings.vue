@@ -12,7 +12,7 @@
         'form-select w-full px-3 py-2 my-2 bg-white border-2 border-gray-300 rounded-lg focus:border-green-500':
           isAdmin,
         'w-full px-3 py-2 my-2 bg-slate-300 border-2 border-gray-300 rounded-lg cursor-not-allowed':
-          !isAdmin,
+          !isAdmin||ongoingGame,
       }">
       <option value="1">1</option>
       <option value="2">2</option>
@@ -31,7 +31,7 @@
         'form-select w-full px-3 py-2 my-2 bg-white border-2 border-gray-300 rounded-lg focus:border-green-500':
           isAdmin,
         'w-full px-3 py-2 my-2 bg-slate-300 border-2 border-gray-300 rounded-lg cursor-not-allowed':
-          !isAdmin,
+          !isAdmin||ongoingGame,
       }">
       <option value="15 Seconds">15 Seconds</option>
       <option value="30 Seconds">30 Seconds</option>
@@ -100,10 +100,23 @@ export default {
   },
   props: {
     isAdmin: { type: Boolean },
+    ongoingGame: { type: Boolean },
   },
   //refactor to use Store actions
   methods: {
     startGame() {
+      try {
+        if (this.ongoingGame) {
+        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
+        this.socketStore.socketObject.emit("startNewRound", this.roomInfo);
+        return;
+      }
+        
+      } catch (error) {
+        console.log(error);
+        return
+      }
+
       try {
         this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
         this.socketStore.socketObject.emit("startGame", this.roomInfo);

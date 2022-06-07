@@ -184,6 +184,11 @@ server.on("connection", function (socket) {
     }
   });
 
+  socket.on("startNewRound", function (roomInfo) {
+    // clear any info from previous round. PlayerSongSelected, ShuffledSongs, scoreboard[index].voteArray clear
+    server.sockets.in(roomInfo.roomID).emit("startNewRoundEvent");
+  });
+
   socket.on("nextGame", function (roomInfo) {
     try {
       server.sockets.in(roomInfo.roomID).emit("nextGameEvent");

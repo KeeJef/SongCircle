@@ -62,7 +62,6 @@ export default {
     }
  
     this.socketStore.socketObject.on("nextRevealEvent", () => {
-      console.log("event rc")
       this.index ++;
 
       try {
@@ -80,6 +79,12 @@ export default {
     });
 
     this.socketStore.socketObject.on("nextGameEvent", () => {
+      this.roomInfo.currentRound ++
+
+      if (this.roomInfo.currentRound > this.roomInfo.roomSettings.rounds) {
+        this.socketStore.socketObject.emit("endGame", this.roomInfo)
+      }
+
       this.$router.push('nextGame');
     });
  

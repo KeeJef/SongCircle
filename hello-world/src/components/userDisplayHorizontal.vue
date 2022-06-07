@@ -25,7 +25,8 @@ export default {
   data() {
     return {};
   },
-  props: {},
+  props: {
+  },
   methods: {},
   components: {},
 };
