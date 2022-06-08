@@ -186,6 +186,15 @@ server.on("connection", function (socket) {
 
   socket.on("startNewRound", function (roomInfo) {
     // clear any info from previous round. PlayerSongSelected, ShuffledSongs, scoreboard[index].voteArray clear
+
+    // for (let index = 0; index < roomsArray.length; index++) {
+    //   const element = roomsArray[index];
+
+    //   if (element.roomID == roomInfo.roomID) {
+    //     element.gameInProgress = true;
+    //   }
+    // }
+
     server.sockets.in(roomInfo.roomID).emit("startNewRoundEvent");
   });
 

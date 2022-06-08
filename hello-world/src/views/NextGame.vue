@@ -47,7 +47,19 @@ export default {
   mounted() {
 
     this.socketStore.socketObject.on("startNewRoundEvent", () => {
-    // clear any info from previous round. PlayerSongSelected, ShuffledSongs, scoreboard[index].voteArray clear
+    // // clear any info from previous round. PlayerSongSelected, ShuffledSongs, scoreboard[index].voteArray clear
+    //   this.playerInfo.playerSongSelected = false;
+
+    //   //for roominfo.members set playersongSelected to false
+    //   for (let i = 0; i < this.roomInfo.members.length; i++) {
+    //     this.roomInfo.members[i].playerSongSelected = false;
+    //   }
+
+    //   this.roomInfo.scoreboard.forEach((scoreboardItem) => {
+    //     scoreboardItem.voteArray = [];
+    //   });
+    //   this.roomInfo.shuffledSongs = [];
+
       this.$router.push('search');
     });
 

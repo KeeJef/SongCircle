@@ -96,6 +96,7 @@ export default {
       }
 
         this.socketStore.socketObject.emit("nextReveal",this.roomInfo);
+        this.reveal = false;
         
     },
   },
