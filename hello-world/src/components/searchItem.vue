@@ -49,7 +49,7 @@ export default {
         url: this.url,
         playerSocketID:this.playerInfo.playerSocketID,
         songID:this.songID
-      }, this.roomInfo , this.playerInfo.playerSocketID);
+      }, this.roomInfo.roomID , this.playerInfo.playerSocketID);
       this.isClicked = false;
       this.buttonName = "Selected";
     }

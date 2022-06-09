@@ -55,6 +55,11 @@ export default {
   // refactor Store to use actions
 
   async mounted() {
+
+    if (this.socketStore.socketObject) {
+      return
+    }
+
     try {
       this.socketStore.socketObject = await io(url);
 

@@ -45,7 +45,8 @@ export default {
     return {
       fadeIn: false,
       qrSize: 280,
-      baseURL: "http://localhost:8080/#/join?",
+      //baseURL: "http://localhost:8080/#/join?",
+      baseURL: "https://songcircle.xyz/#/join?",
     };
   },
   components: {

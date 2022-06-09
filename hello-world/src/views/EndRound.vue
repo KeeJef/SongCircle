@@ -73,7 +73,6 @@ export default {
       this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
       this.currentSongPlayerID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
 
-
       } catch (error) {
         console.log(error)
         console.log("Probably played with 1 player")
@@ -81,12 +80,6 @@ export default {
     });
 
     this.socketStore.socketObject.on("nextGameEvent", () => {
-      this.roomInfo.currentRound ++
-
-      if (this.roomInfo.currentRound > this.roomInfo.roomSettings.rounds) {
-        this.socketStore.socketObject.emit("endGame", this.roomInfo)
-      }
-
       this.$router.push('nextGame');
     });
  

@@ -34,7 +34,7 @@ export default {
       try {
         var voteObject = {songID:this.currentSongID, voteFor: playerSocketID, voteBy: this.playerInfo.playerSocketID};
 
-        this.socketStore.socketObject.emit("vote",this.roomInfo, voteObject);
+        this.socketStore.socketObject.emit("vote",this.roomInfo.roomID, voteObject);
         this.votedStatus = true;
       } catch (error) {
         console.log(error)

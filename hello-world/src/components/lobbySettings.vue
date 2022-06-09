@@ -68,7 +68,7 @@
     </select>
     <input v-model="roomInfo.roomSettings.theme" v-if="this.isCustom" type="text" class=" w-full px-3 py-1 my-2 bg-white border-2 border-gray-300 rounded-lg focus:border-green-500">
     <div>
-      <button v-if="isAdmin"
+      <button v-if="isAdmin && gameNotOver()"
         @click="startGame"
         type="button"
         class="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
@@ -107,8 +107,8 @@ export default {
     startGame() {
       try {
         if (this.ongoingGame) {
-        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
-        this.socketStore.socketObject.emit("startNewRound", this.roomInfo);
+        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo.roomSettings, this.roomInfo.roomID);
+        this.socketStore.socketObject.emit("startNewRound", this.roomInfo.roomID);
         return;
       }
         
@@ -118,8 +118,8 @@ export default {
       }
 
       try {
-        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
-        this.socketStore.socketObject.emit("startGame", this.roomInfo);
+        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo.roomSettings, this.roomInfo.roomID);
+        this.socketStore.socketObject.emit("startGame", this.roomInfo.roomID);
         this.roomInfo.gameInProgress = true
       } catch (error) {
         console.log(error)
@@ -134,13 +134,20 @@ export default {
         this.roomInfo.roomSettings.theme = ""
       }
       try {
-        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo);
+        this.socketStore.socketObject.emit("updateRoomSettings", this.roomInfo.roomSettings, this.roomInfo.roomID);
       } catch (error) {
         console.log(error);
       }
-    }
+    },
+    gameNotOver() {
+      if (this.roomInfo.currentRound > this.roomInfo.roomSettings.rounds -1) {
+        return false
+      }
+      return true
+    },
   },
   async mounted() {
+
     this.roomInfo.roomSettings.rounds = 3;
     this.roomInfo.roomSettings.time = "30 Seconds";
     this.roomInfo.roomSettings.theme = "Rock Anthems";

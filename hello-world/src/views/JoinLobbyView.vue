@@ -42,9 +42,13 @@ export default {
   async mounted() {
     //try connecting to the server
 
-    try {
-      this.socketStore.socketObject = await io(url);
+    if (this.socketStore.socketObject) {
+      return
+    }
 
+    try {
+
+      this.socketStore.socketObject = await io(url);
       this.socketStore.socketObject.on("connect", () => {
         this.playerInfo.playerSocketID = this.socketStore.socketObject.id
       });

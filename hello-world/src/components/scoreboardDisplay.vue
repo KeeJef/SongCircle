@@ -57,15 +57,22 @@ export default {
   },
   data() {
     return {
-      reveal: false,
       currentUsername: "",
       buttonText: "Next song",
-      index: 0
+      index: 0,
+      reveal: false,
     };
   },
   props: {
     currentSongID: String,
     currentPlayerSelectedSong: String,
+  },
+    watch: {
+    currentPlayerSelectedSong: {
+      handler() {
+        this.reveal= false
+      },
+    },
   },
   methods: {
     checkWinArray(scoreboardItem) {
@@ -87,7 +94,7 @@ export default {
       this.index++;
 
       if (this.index == this.roomInfo.shuffledSongs.length) {
-        this.socketStore.socketObject.emit("nextGame",this.roomInfo)
+        this.socketStore.socketObject.emit("nextGame",this.roomInfo.roomID)
         return
       }
 
@@ -95,8 +102,7 @@ export default {
         this.buttonText = "Next round"
       }
 
-        this.socketStore.socketObject.emit("nextReveal",this.roomInfo);
-        this.reveal = false;
+        this.socketStore.socketObject.emit("nextReveal",this.roomInfo.roomID);
         
     },
   },

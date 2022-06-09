@@ -107,17 +107,15 @@ server.on("connection", function (socket) {
     console.log("Added user to room " + roomID);
   });
 
-  socket.on("updateRoomSettings", function (roomInfo) {
+  socket.on("updateRoomSettings", function (roomSettings, roomID) {
     try {
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
-        console.log(socket.id);
+        
 
-        if ((element.roomID = roomInfo.roomID)) {
-          element.roomSettings = roomInfo.roomSettings;
-          server.sockets
-            .in(roomInfo.roomID)
-            .emit("newSettings", element.roomSettings);
+        if ((element.roomID = roomID)) {
+          element.roomSettings = roomSettings;
+          server.sockets.in(roomID).emit("newSettings", element.roomSettings);
           console.log("Updated Room Settings");
           return;
         }
@@ -127,28 +125,28 @@ server.on("connection", function (socket) {
     }
   });
 
-  socket.on("vote", function (roomInfo, voteObject) {
+  socket.on("vote", function (roomID, voteObject) {
     try {
       for (let i = 0; i < roomsArray.length; i++) {
         const room = roomsArray[i];
 
-        if ((room.roomID = roomInfo.roomID)) {
+        if ((room.roomID = roomID)) {
           for (let j = 0; j < room.selectedSongs.length; j++) {
             const songObject = room.selectedSongs[j];
 
             if (songObject.selectedSong.songID == voteObject.songID) {
               songObject.voteArray.push(voteObject);
-              server.sockets.in(roomInfo.roomID).emit("newVote", voteObject.voteBy);
+              server.sockets.in(roomID).emit("newVote", voteObject.voteBy);
 
               if (songObject.voteArray.length == room.members.length) {
                 room.currentVoteRound ++;
 
                 if (room.currentVoteRound >= room.selectedSongs.length) {
                   calculateScoreboard(room.selectedSongs, room.scoreboard);
-                  server.sockets.in(roomInfo.roomID).emit("nextRound", room.scoreboard);
+                  server.sockets.in(roomID).emit("nextRound", room.scoreboard);
                 }
 
-                server.sockets.in(roomInfo.roomID).emit("nextVote");
+                server.sockets.in(roomID).emit("nextVote");
               }
               return
             }
@@ -160,9 +158,9 @@ server.on("connection", function (socket) {
     }
   });
 
-  socket.on("startGame", function (roomInfo) {
+  socket.on("startGame", function (roomID) {
     try {
-      server.sockets.in(roomInfo.roomID).emit("startGameEvent");
+      server.sockets.in(roomID).emit("startGameEvent");
 
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
@@ -176,44 +174,73 @@ server.on("connection", function (socket) {
     }
   });
 
-  socket.on("nextReveal", function (roomInfo) {
+  socket.on("nextReveal", function (roomID) {
     try {
-      server.sockets.in(roomInfo.roomID).emit("nextRevealEvent");
+      server.sockets.in(roomID).emit("nextRevealEvent");
     } catch (error) {
       console.log(error);
     }
   });
 
-  socket.on("startNewRound", function (roomInfo) {
+  socket.on("gameOver", function (roomID) {
+    try {
+      
+      for (let index = 0; index < roomsArray.length; index++) {
+        const element = roomsArray[index];
+
+        if (element.roomID == roomID) {
+          element.gameInProgress = false;
+          votingMode = false;
+          element.currentVoteRound = 0;
+          element.selectedSongs = [];
+          for (let i = 0; i < element.scoreboard.length; i++) {
+            element.scoreboard[i].winArray = [];
+            element.scoreboard[i].score = 0;
+          }
+        }
+      }
+      server.sockets.in(roomID).emit("gameOverEvent");
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  socket.on("startNewRound", function (roomID) {
     // clear any info from previous round. PlayerSongSelected, ShuffledSongs, scoreboard[index].voteArray clear
 
-    // for (let index = 0; index < roomsArray.length; index++) {
-    //   const element = roomsArray[index];
+    for (let index = 0; index < roomsArray.length; index++) {
+      const element = roomsArray[index];
 
-    //   if (element.roomID == roomInfo.roomID) {
-    //     element.gameInProgress = true;
-    //   }
-    // }
+      if (element.roomID == roomID) {
+        element.selectedSongs = []
+        element.currentVoteRound = 0;
+        //for element.scoreboard clear winArray
+        for (let i = 0; i < element.scoreboard.length; i++) {
+          element.scoreboard[i].winArray = [];
+        }
+        
+      }
+    }
 
-    server.sockets.in(roomInfo.roomID).emit("startNewRoundEvent");
+    server.sockets.in(roomID).emit("startNewRoundEvent");
   });
 
-  socket.on("nextGame", function (roomInfo) {
+  socket.on("nextGame", function (roomID) {
     try {
-      server.sockets.in(roomInfo.roomID).emit("nextGameEvent");
+      server.sockets.in(roomID).emit("nextGameEvent");
     } catch (error) {
       console.log(error);
     }
   });
 
-  socket.on("songChosen", function (selectedSong, roomInfo, playerSocketID) {
+  socket.on("songChosen", function (selectedSong, roomID, playerSocketID) {
     // check array for previously selected song from user, if yes replace it, if no add it to array, then check if each member has playerSongSelected = true, if yes then randomise the array and start the game
 
     for (let index = 0; index < roomsArray.length; index++) {
       serverRoom = roomsArray[index];
       songObject = {selectedSong:selectedSong, voteArray:[]}
 
-      if ((serverRoom.roomID = roomInfo.roomID)) {
+      if ((serverRoom.roomID = roomID)) {
         for (
           let index2 = 0;
           index2 < serverRoom.selectedSongs.length;
@@ -224,18 +251,18 @@ server.on("connection", function (socket) {
             serverRoom.selectedSongs.splice(index2, 1);
             serverRoom.selectedSongs.push(songObject);
 
-            server.sockets.in(roomInfo.roomID).emit("newSong", playerSocketID);
+            server.sockets.in(roomID).emit("newSong", playerSocketID);
             return;
           }
         }
         serverRoom.selectedSongs.push(songObject);
-        server.sockets.in(roomInfo.roomID).emit("newSong", playerSocketID);
+        server.sockets.in(roomID).emit("newSong", playerSocketID);
 
         if (serverRoom.members.length == serverRoom.selectedSongs.length) {
           console.log("All players have selected a song");
           serverRoom.selectedSongs = shuffleArray(serverRoom.selectedSongs);
           server.sockets
-            .in(roomInfo.roomID)
+            .in(roomID)
             .emit("startRound", serverRoom.selectedSongs);
             serverRoom.votingMode = true;
           return;
