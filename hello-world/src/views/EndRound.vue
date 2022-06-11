@@ -56,7 +56,7 @@ export default {
       this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
       this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
       this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
-      this.currentSongPlayerID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
+      this.currentSongPlayerID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerID;
     } catch (error) {
       console.log(error)
     }
@@ -71,7 +71,7 @@ export default {
       this.currentArtistName = this.roomInfo.shuffledSongs[this.index].selectedSong.artistName;
       this.currentUrl = this.roomInfo.shuffledSongs[this.index].selectedSong.url;
       this.currentSongID = this.roomInfo.shuffledSongs[this.index].selectedSong.songID;
-      this.currentSongPlayerID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerSocketID;
+      this.currentSongPlayerID = this.roomInfo.shuffledSongs[this.index].selectedSong.playerID;
 
       } catch (error) {
         console.log(error)

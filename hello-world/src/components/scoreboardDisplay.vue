@@ -84,7 +84,7 @@ export default {
       for (let index = 0; index < this.roomInfo.members.length; index++) {
         const element = this.roomInfo.members[index];
 
-        if (element.playerSocketID == this.currentPlayerSelectedSong) {
+        if (element.playerID == this.currentPlayerSelectedSong) {
           this.currentUsername = element.playerName + element.playerEmoji;
         }
       }

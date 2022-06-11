@@ -41,24 +41,24 @@ export default {
       this.roomInfo.members = membersArray;
     });
 
-    this.socketStore.socketObject.on("newSong", (playerSocketID) => {
+    this.socketStore.socketObject.on("newSong", (playerID) => {
       console.log("NewSongEvent Fired")
       for (let index = 0; index < this.roomInfo.members.length; index++) {
         const element = this.roomInfo.members[index];
 
-        if (element.playerSocketID == playerSocketID) {
+        if (element.playerID == playerID) {
           this.roomInfo.members[index].playerSongSelected = true;
         }
         
       }
     });
 
-        this.socketStore.socketObject.on("newVote", (playerSocketID) => {
+        this.socketStore.socketObject.on("newVote", (playerID) => {
       console.log("NewVote Fired")
       for (let index = 0; index < this.roomInfo.members.length; index++) {
         const element = this.roomInfo.members[index];
 
-        if (element.playerSocketID == playerSocketID) {
+        if (element.playerID == playerID) {
           this.roomInfo.members[index].playerSongSelected = true;
         }
         
@@ -66,6 +66,7 @@ export default {
     });
 
     this.socketStore.socketObject.on("startRound", (shuffledSongArray) => {
+      console.log("StartRound Fired")
       this.roomInfo.shuffledSongs = shuffledSongArray;
       //clear the playerSongSelected so i can use the tick in other views
       this.roomInfo.members.forEach((element) => {

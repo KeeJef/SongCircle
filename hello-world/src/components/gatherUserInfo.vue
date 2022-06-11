@@ -141,6 +141,7 @@ export default {
       if (this.playerInfo.playerName) {
         if (this.playerInfo.playerName.length <10) {
           this.playerInfo.playerName = this.playerInfo.playerName.charAt(0).toUpperCase() + this.playerInfo.playerName.slice(1);
+          this.playerInfo.playerID = Math.random().toString(36).replace(/[^a-z0-9]+/g, "").substr(0, 6);
           this.$router.push(this.nextRoute);
         }
         else{

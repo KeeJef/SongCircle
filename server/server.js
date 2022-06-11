@@ -86,11 +86,9 @@ server.on("connection", function (socket) {
       socket.join(roomID);
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
-
         if (element.roomID == roomID) {
-          playerInfo.playerSocketID = socket.id;
           element.members.push(playerInfo);
-          element.scoreboard.push({playerName:playerInfo.playerName, playerEmoji:playerInfo.playerEmoji, playerID: playerInfo.playerSocketID, score: 0, winArray:[]})
+          element.scoreboard.push({playerName:playerInfo.playerName, playerEmoji:playerInfo.playerEmoji, playerID: playerInfo.playerID, score: 0, winArray:[]})
           //socket.emit("returnMembers", element.members)
           server.sockets.in(roomID).emit("returnMembers", element.members);
           //make sure users who join the room when the host is using default settings get current settings
@@ -233,7 +231,7 @@ server.on("connection", function (socket) {
     }
   });
 
-  socket.on("songChosen", function (selectedSong, roomID, playerSocketID) {
+  socket.on("songChosen", function (selectedSong, roomID, playerID) {
     // check array for previously selected song from user, if yes replace it, if no add it to array, then check if each member has playerSongSelected = true, if yes then randomise the array and start the game
 
     for (let index = 0; index < roomsArray.length; index++) {
@@ -247,16 +245,16 @@ server.on("connection", function (socket) {
           index2++
         ) {
           serverSelectedSong = serverRoom.selectedSongs[index2];
-          if (serverSelectedSong.playerSocketID == playerSocketID) {
+          if (serverSelectedSong.selectedSong.playerID == playerID) {
             serverRoom.selectedSongs.splice(index2, 1);
             serverRoom.selectedSongs.push(songObject);
 
-            server.sockets.in(roomID).emit("newSong", playerSocketID);
+            server.sockets.in(roomID).emit("newSong", playerID);
             return;
           }
         }
         serverRoom.selectedSongs.push(songObject);
-        server.sockets.in(roomID).emit("newSong", playerSocketID);
+        server.sockets.in(roomID).emit("newSong", playerID);
 
         if (serverRoom.members.length == serverRoom.selectedSongs.length) {
           console.log("All players have selected a song");
@@ -271,6 +269,14 @@ server.on("connection", function (socket) {
       }
     }
   });
+
+    //function to check whether user is still in room or has disconnected and needs to be added back
+
+    //reconnect, shiuld just socket join if local storage has existing room 
+
+    socket.on("reconnect", function (roomID) {
+      socket.join(roomID);
+    });
 
   socket.on("disconnect", function () {
     for (let i = 0; i < roomsArray.length; i++) {
@@ -318,7 +324,7 @@ function calculateScoreboard(selectedSongs, scoreboard) {
         continue
       }
 
-      if (songVote.voteFor == song.selectedSong.playerSocketID) {
+      if (songVote.voteFor == song.selectedSong.playerID) {
         objIndex = scoreboard.findIndex((obj => obj.playerID == songVote.voteBy));
         scoreboard[objIndex].winArray.push(song.selectedSong.songID);
         scoreboard[objIndex].score += 10;

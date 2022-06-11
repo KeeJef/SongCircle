@@ -47,9 +47,9 @@ export default {
         artistName: this.artistName,
         albumArt: this.albumArt,
         url: this.url,
-        playerSocketID:this.playerInfo.playerSocketID,
+        playerID:this.playerInfo.playerID,
         songID:this.songID
-      }, this.roomInfo.roomID , this.playerInfo.playerSocketID);
+      }, this.roomInfo.roomID , this.playerInfo.playerID);
       this.isClicked = false;
       this.buttonName = "Selected";
     }

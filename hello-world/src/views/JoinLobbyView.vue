@@ -38,9 +38,9 @@ export default {
     avatarLobbyDisplay,
     roomDetails,
   },
-  methods: {},
+  methods: {
+  },
   async mounted() {
-    //try connecting to the server
 
     if (this.socketStore.socketObject) {
       return
