@@ -87,6 +87,14 @@ server.on("connection", function (socket) {
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
         if (element.roomID == roomID) {
+          //check if playerID is already in room 
+
+          if (element.members.find(player => player.playerID == playerInfo.playerID)) {
+            server.sockets.in(roomID).emit("returnMembers", element.members);
+            server.sockets.in(roomID).emit("newSettings", element.roomSettings, element.gameInProgress);
+            return;
+          }
+
           element.members.push(playerInfo);
           element.scoreboard.push({playerName:playerInfo.playerName, playerEmoji:playerInfo.playerEmoji, playerID: playerInfo.playerID, score: 0, winArray:[]})
           //socket.emit("returnMembers", element.members)
@@ -272,13 +280,34 @@ server.on("connection", function (socket) {
 
     //function to check whether user is still in room or has disconnected and needs to be added back
 
+    socket.on("checkRoom", function (roomID, playerID) {   
+      for (let index = 0; index < roomsArray.length; index++) {
+        const element = roomsArray[index];
+
+        if (element.roomID == roomID) {
+          for (let i = 0; i < element.members.length; i++) {
+            const member = element.members[i];
+
+            if (member.playerID == playerID) {
+              socket.emit("checkRoomResults", true);
+              return
+            }
+          }
+          socket.emit("checkRoomResults", false);
+          return
+        }
+      }
+    });
+
     //reconnect, shiuld just socket join if local storage has existing room 
 
     socket.on("reconnect", function (roomID) {
+      console.log("user reconnected")
       socket.join(roomID);
     });
 
   socket.on("disconnect", function () {
+    console.log("user disconnected");
     for (let i = 0; i < roomsArray.length; i++) {
       const room = roomsArray[i];
 
@@ -286,13 +315,15 @@ server.on("connection", function (socket) {
         const member = room.members[j];
 
         if (member.playerSocketID == socket.id) {
-          room.members.splice(j, 1);
-          server.sockets.in(roomID).emit("returnMembers", room.members);
+          //Probably need to kill inactive players after like 30 mins
 
-          if (room.members.length == 0) {
-            roomsArray.splice(i, 1);
-            console.log("Room Deleted");
-          }
+          // room.members.splice(j, 1);
+          // server.sockets.in(roomID).emit("returnMembers", room.members);
+
+          // if (room.members.length == 0) {
+          //   roomsArray.splice(i, 1);
+          //   console.log("Room Deleted");
+          // }
 
           return;
         }

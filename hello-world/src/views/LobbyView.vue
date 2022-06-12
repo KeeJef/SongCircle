@@ -18,8 +18,7 @@
 import lobbySettings from "../components/lobbySettings.vue";
 import avatarLobbyDisplay from "../components/avatarLobbyDisplay.vue";
 import roomDetails from "../components/roomDetails.vue";
-import io from "socket.io-client";
-import { useRoomInfo, useSocket, usePlayerInfo, url} from "@/store/index";
+import { useRoomInfo, useSocket, usePlayerInfo} from "@/store/index";
 
 export default {
   name: "LobbyView",
@@ -55,21 +54,6 @@ export default {
   // refactor Store to use actions
 
   async mounted() {
-
-    if (this.socketStore.socketObject) {
-      return
-    }
-
-    try {
-      this.socketStore.socketObject = await io(url);
-
-      this.socketStore.socketObject.on("connect", () => {
-        this.playerInfo.playerSocketID = this.socketStore.socketObject.id
-      });
-
-    } catch (error) {
-      console.log("Failed to connect to SongCircle server" + error);
-    }
 
     try {
       this.socketStore.socketObject.emit("createNewRoom");
