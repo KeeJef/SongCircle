@@ -40,7 +40,9 @@ server.on("connection", function (socket) {
         songObject = {
           id: index,
           artistName: element.artistName,
-          songID: Math.floor(Math.random() * 1000000).toString().padStart(6, "0"),
+          songID: Math.floor(Math.random() * 1000000)
+            .toString()
+            .padStart(6, "0"),
           songName: element.name,
           songPreviewUrl: element.previews[0].url,
           albumArt: albumArtTransform,
@@ -59,6 +61,7 @@ server.on("connection", function (socket) {
   //move logic for creation of random room to serverside
 
   socket.on("createNewRoom", function () {
+    const createdTime = Date.now();
     roomID = Math.random().toString(36).substr(2, 7);
     console.log("a new room was created with the name " + roomID);
 
@@ -71,6 +74,7 @@ server.on("connection", function (socket) {
       members: [],
       selectedSongs: [],
       scoreboard: [],
+      createdTime: createdTime,
     };
     roomsArray.push(roomObject);
 
@@ -87,16 +91,32 @@ server.on("connection", function (socket) {
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
         if (element.roomID == roomID) {
-          //check if playerID is already in room 
+          //check if playerID is already in room
 
-          if (element.members.find(player => player.playerID == playerInfo.playerID)) {
+          if (
+            element.members.find(
+              (player) => player.playerID == playerInfo.playerID
+            )
+          ) {
             server.sockets.in(roomID).emit("returnMembers", element.members);
-            server.sockets.in(roomID).emit("newSettings", element.roomSettings, element.gameInProgress);
+            server.sockets
+              .in(roomID)
+              .emit(
+                "newSettings",
+                element.roomSettings,
+                element.gameInProgress
+              );
             return;
           }
 
           element.members.push(playerInfo);
-          element.scoreboard.push({playerName:playerInfo.playerName, playerEmoji:playerInfo.playerEmoji, playerID: playerInfo.playerID, score: 0, winArray:[]})
+          element.scoreboard.push({
+            playerName: playerInfo.playerName,
+            playerEmoji: playerInfo.playerEmoji,
+            playerID: playerInfo.playerID,
+            score: 0,
+            winArray: [],
+          });
           //socket.emit("returnMembers", element.members)
           server.sockets.in(roomID).emit("returnMembers", element.members);
           //make sure users who join the room when the host is using default settings get current settings
@@ -117,7 +137,6 @@ server.on("connection", function (socket) {
     try {
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
-        
 
         if (element.roomID == roomID) {
           element.roomSettings = roomSettings;
@@ -145,7 +164,7 @@ server.on("connection", function (socket) {
               server.sockets.in(roomID).emit("newVote", voteObject.voteBy);
 
               if (songObject.voteArray.length == room.members.length) {
-                room.currentVoteRound ++;
+                room.currentVoteRound++;
 
                 if (room.currentVoteRound >= room.selectedSongs.length) {
                   calculateScoreboard(room.selectedSongs, room.scoreboard);
@@ -154,13 +173,13 @@ server.on("connection", function (socket) {
 
                 server.sockets.in(roomID).emit("nextVote");
               }
-              return
+              return;
             }
           }
         }
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   });
 
@@ -190,7 +209,6 @@ server.on("connection", function (socket) {
 
   socket.on("gameOver", function (roomID) {
     try {
-      
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
 
@@ -218,13 +236,12 @@ server.on("connection", function (socket) {
       const element = roomsArray[index];
 
       if (element.roomID == roomID) {
-        element.selectedSongs = []
+        element.selectedSongs = [];
         element.currentVoteRound = 0;
         //for element.scoreboard clear winArray
         for (let i = 0; i < element.scoreboard.length; i++) {
           element.scoreboard[i].winArray = [];
         }
-        
       }
     }
 
@@ -244,7 +261,7 @@ server.on("connection", function (socket) {
 
     for (let index = 0; index < roomsArray.length; index++) {
       serverRoom = roomsArray[index];
-      songObject = {selectedSong:selectedSong, voteArray:[]}
+      songObject = { selectedSong: selectedSong, voteArray: [] };
 
       if ((serverRoom.roomID = roomID)) {
         for (
@@ -270,7 +287,7 @@ server.on("connection", function (socket) {
           server.sockets
             .in(roomID)
             .emit("startRound", serverRoom.selectedSongs);
-            serverRoom.votingMode = true;
+          serverRoom.votingMode = true;
           return;
         }
         return;
@@ -278,36 +295,36 @@ server.on("connection", function (socket) {
     }
   });
 
-    //function to check whether user is still in room or has disconnected and needs to be added back
+  //function to check whether user is still in room or has disconnected and needs to be added back
 
-    socket.on("kickUser", function (roomID, playerID) {   
-      for (let index = 0; index < roomsArray.length; index++) {
-        const element = roomsArray[index];
+  socket.on("kickUser", function (roomID, playerID) {
+    for (let index = 0; index < roomsArray.length; index++) {
+      const element = roomsArray[index];
 
-        if (element.roomID == roomID) {
-          for (let i = 0; i < element.members.length; i++) {
-            const member = element.members[i];
+      if (element.roomID == roomID) {
+        for (let i = 0; i < element.members.length; i++) {
+          const member = element.members[i];
 
-            if (member.playerID == playerID) {
-              element.members.splice(i, 1);
-              server.sockets.in(roomID).emit("returnMembers", element.members);
-              console.log("User has been removed from room");
-              server.sockets.in(roomID).emit("kickedMember", member.playerID);
-              return
-            }
+          if (member.playerID == playerID) {
+            element.members.splice(i, 1);
+            server.sockets.in(roomID).emit("returnMembers", element.members);
+            console.log("User has been removed from room");
+            server.sockets.in(roomID).emit("kickedMember", member.playerID);
+            return;
           }
-          
-          return
         }
+
+        return;
       }
-    });
+    }
+  });
 
-    //reconnect, shiuld just socket join if local storage has existing room 
+  //reconnect, shiuld just socket join if local storage has existing room
 
-    socket.on("reconnect", function (roomID) {
-      console.log("user reconnected")
-      socket.join(roomID);
-    });
+  socket.on("reconnect", function (roomID) {
+    console.log("user reconnected");
+    socket.join(roomID);
+  });
 
   socket.on("disconnect", function () {
     console.log("user disconnected");
@@ -334,6 +351,8 @@ server.on("connection", function (socket) {
     }
   });
 });
+//check rooms for old rooms hourly 3600000
+setInterval(intervalFunc, 1500);
 
 function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
@@ -345,8 +364,19 @@ function shuffleArray(array) {
   return array;
 }
 
-function calculateScoreboard(selectedSongs, scoreboard) {
+function intervalFunc() {
+  //loop through the roomArray and check if any rooms have been inactive for more than 1 day, if so delete them
+  for (let i = 0; i < roomsArray.length; i++) {
+    const room = roomsArray[i];
 
+    if (room.createdTime < Date.now() - 86400000) {
+      roomsArray.splice(i, 1);
+      console.log("Room " + room.roomID + " has been deleted");
+    }
+  }
+}
+
+function calculateScoreboard(selectedSongs, scoreboard) {
   for (let i = 0; i < selectedSongs.length; i++) {
     const song = selectedSongs[i];
 
@@ -355,18 +385,16 @@ function calculateScoreboard(selectedSongs, scoreboard) {
 
       if (songVote.voteBy == songVote.voteFor) {
         //dont score votes for self
-        continue
+        continue;
       }
 
       if (songVote.voteFor == song.selectedSong.playerID) {
-        objIndex = scoreboard.findIndex((obj => obj.playerID == songVote.voteBy));
+        objIndex = scoreboard.findIndex(
+          (obj) => obj.playerID == songVote.voteBy
+        );
         scoreboard[objIndex].winArray.push(song.selectedSong.songID);
         scoreboard[objIndex].score += 10;
       }
-        
-      }
-      
     }
-
+  }
 }
-
