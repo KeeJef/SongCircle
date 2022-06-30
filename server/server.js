@@ -119,7 +119,7 @@ server.on("connection", function (socket) {
         const element = roomsArray[index];
         
 
-        if ((element.roomID = roomID)) {
+        if (element.roomID == roomID) {
           element.roomSettings = roomSettings;
           server.sockets.in(roomID).emit("newSettings", element.roomSettings);
           console.log("Updated Room Settings");
@@ -280,7 +280,7 @@ server.on("connection", function (socket) {
 
     //function to check whether user is still in room or has disconnected and needs to be added back
 
-    socket.on("checkRoom", function (roomID, playerID) {   
+    socket.on("kickUser", function (roomID, playerID) {   
       for (let index = 0; index < roomsArray.length; index++) {
         const element = roomsArray[index];
 
@@ -289,11 +289,14 @@ server.on("connection", function (socket) {
             const member = element.members[i];
 
             if (member.playerID == playerID) {
-              socket.emit("checkRoomResults", true);
+              element.members.splice(i, 1);
+              server.sockets.in(roomID).emit("returnMembers", element.members);
+              console.log("User has been removed from room");
+              server.sockets.in(roomID).emit("kickedMember", member.playerID);
               return
             }
           }
-          socket.emit("checkRoomResults", false);
+          
           return
         }
       }

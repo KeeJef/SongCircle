@@ -34,15 +34,24 @@ export default {
       this.socketStore.socketObject = await io(url);
       this.socketStore.socketObject.on("connect", () => {
         this.playerInfo.playerSocketID = this.socketStore.socketObject.id;
+        this.lastSocketID = this.socketStore.socketObject.id
       });
     } catch (error) {
       console.log("Failed to connect to SongCircle server" + error);
     }
 
+    this.socketStore.socketObject.on("kickedMember", (playerID) => {
+      if (playerID == this.playerInfo.playerID) {
+        alert("You have been kicked from the room");
+        this.$router.push('/');
+      }
+    });
+
+    //listen to see if we have been kicked out of the room
+
     setInterval(() => {
       //this is messy but watch wasnt working on iOS for some reason
 		try {
-      console.log(this.socketStore.socketObject.id)
       if (this.lastSocketID != this.socketStore.socketObject.id) {
         this.reconnect()
       }
@@ -53,7 +62,7 @@ export default {
 
     this.lastSocketID = this.socketStore.socketObject.id
 
-	}, 2000)
+	}, 500)
 
   },
 };
