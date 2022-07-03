@@ -40,14 +40,15 @@ export default {
       console.log("Failed to connect to SongCircle server" + error);
     }
 
+    //todo, what happens if we kick someone while we are voting or throughout the game
+    //todo fix joining mid game
+
     this.socketStore.socketObject.on("kickedMember", (playerID) => {
       if (playerID == this.playerInfo.playerID) {
         alert("You have been kicked from the room");
         this.$router.push('/');
       }
     });
-
-    //listen to see if we have been kicked out of the room
 
     setInterval(() => {
       //this is messy but watch wasnt working on iOS for some reason

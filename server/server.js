@@ -155,7 +155,7 @@ server.on("connection", function (socket) {
       for (let i = 0; i < roomsArray.length; i++) {
         const room = roomsArray[i];
 
-        if ((room.roomID = roomID)) {
+        if ((room.roomID == roomID)) {
           for (let j = 0; j < room.selectedSongs.length; j++) {
             const songObject = room.selectedSongs[j];
 
@@ -263,7 +263,7 @@ server.on("connection", function (socket) {
       serverRoom = roomsArray[index];
       songObject = { selectedSong: selectedSong, voteArray: [] };
 
-      if ((serverRoom.roomID = roomID)) {
+      if ((serverRoom.roomID == roomID)) {
         for (
           let index2 = 0;
           index2 < serverRoom.selectedSongs.length;
