@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
-export const url = "https://songcircle.xyz";
-//export const url = "http://localhost:8000";
+//export const url = "https://songcircle.xyz";
+export const url = "http://localhost:8000";
 
 export const usePlayerInfo = defineStore({
   id: "playerInfo",

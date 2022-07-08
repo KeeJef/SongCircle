@@ -47,7 +47,7 @@
       <template v-slot:content>
         <div
           class="container bg-green-200 rounded flex-col text-left mx-auto px-2 py-2 m-1">
-          <div class="pb-2">Hello</div>
+          <div class="pb-2">Instructions</div>
           <ol class="list-decimal list-inside pl-3 pb-3">
             <li>
               <b>Invite Friends:</b> Invite all your friends to a lobby using the QR code or link
