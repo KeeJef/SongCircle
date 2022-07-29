@@ -10,8 +10,8 @@
         {{ member.playerName }} {{member.playerEmoji}}
         </button>
       </div>
-      <div v-if="votedStatus" class="text-2xl p-1 flex justify-center">You Voted!</div>
     </div>
+    <div v-if="votedStatus" class="text-2xl p-1 flex justify-center">You Voted!</div>
   </div>
 </template>
 
