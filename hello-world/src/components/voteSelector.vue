@@ -2,11 +2,15 @@
   <div
     class="container bg-white max-w-[935px] flex flex-col justify-center mt-2 rounded">
     <div class="text-2xl p-1">Who added this song?</div>
-    <div class="flex sm:justify-center justify-start overflow-x-auto">
-      <button v-for="member in this.roomInfo.members" :key="member.id" @click="vote(member.playerID)"
+    <div class="flex sm:justify-center justify-start flex-wrap">
+      <div v-if="votedStatus == false">
+        
+        <button v-for="member in this.roomInfo.members" :key="member.id" @click="vote(member.playerID)"
         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mt-2 mb-4 mx-2 rounded" :class="{ 'pointer-events-none cursor-not-allowed': votedStatus }">
         {{ member.playerName }} {{member.playerEmoji}}
-      </button>
+        </button>
+      </div>
+      <div v-if="votedStatus" class="text-2xl p-1 flex justify-center">You Voted!</div>
     </div>
   </div>
 </template>

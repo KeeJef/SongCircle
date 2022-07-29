@@ -92,7 +92,10 @@ server.on("connection", function (socket) {
         const element = roomsArray[index];
         if (element.roomID == roomID) {
           //check if playerID is already in room
-
+          if(element.gameInProgress){
+            socket.emit("joinRoomError", "Game in progress");
+            return;
+          }
           if (
             element.members.find(
               (player) => player.playerID == playerInfo.playerID

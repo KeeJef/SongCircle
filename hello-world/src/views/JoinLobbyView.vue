@@ -71,6 +71,12 @@ export default {
       console.log("Game has started");
       this.$router.push('search')
     });
+
+    this.socketStore.socketObject.on("joinRoomError", () => {
+      console.log("Cannot join Game already in progress");
+      alert("Cannot join Game already in progress, please ask host to start a new game");
+      this.$router.push('/');
+    });
   },
 };
 </script>

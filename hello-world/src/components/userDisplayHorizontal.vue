@@ -8,7 +8,7 @@
         </div>
         <div class="text-6xl pb-1 select-none">{{ member.playerEmoji }}</div>
         <div class="font-bold">
-          {{member.playerName}} <span v-if="member.playerModStatus & !member.playerSongSelected" class="text-1xl">👑</span> <span v-if="member.playerSongSelected" class="text-1xl">✔️</span>
+          {{member.playerName}} <span v-if="member.playerModStatus & !member.playerSongSelected" class="text-1xl">👑</span> <span v-if="member.playerSongSelected" class="text-1xl">✅</span>
         </div>
       </div>
     </div>
