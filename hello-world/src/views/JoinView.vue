@@ -2,7 +2,7 @@
   <div class="p-2">
     <div id="logo" class="container flex justify-center mx-auto pb-5">
       <a href="."
-        ><img src="../assets/songcircle.png" alt="SongCircle Logo"
+        ><img width="520" height="109" src="../assets/songcircle.webp" alt="SongCircle Logo"
       /></a>
     </div>
     <gatherUserInfo

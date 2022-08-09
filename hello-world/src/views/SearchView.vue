@@ -1,6 +1,6 @@
 <template>
   <div id="logo" class="px-2 container flex justify-center mx-auto pb-5">
-    <a href="."><img src="../assets/songcircle.png" alt="SongCircle Logo" /></a>
+    <a href="."><img width="520" height="109" src="../assets/songcircle.webp" alt="SongCircle Logo" /></a>
   </div>
   <div
     class="px-2 flex flex-col sm:flex-row sm:flex items-center justify-center">
