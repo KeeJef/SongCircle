@@ -17,6 +17,9 @@ server.on("connection", function (socket) {
     console.log("Searching for " + searchString);
     packagedResponse = [];
 
+    //remove any illegal characters from searchString
+    searchString = searchString.replace(/[^a-zA-Z0-9 ]/g, "");
+    
     try {
       var response = await axios.get(
         "https://tools.applemediaservices.com/api/apple-media/music/US/search.json?types=songs,albums,music-videos,playlists,artists,stations&term=" +
